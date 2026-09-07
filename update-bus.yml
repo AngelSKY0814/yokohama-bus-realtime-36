@@ -1,0 +1,33 @@
+name: バス情報自動更新
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリを取得
+        uses: actions/checkout@v4
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: requestsをインストール
+        run: pip install requests
+
+      - name: バス情報を取得
+        run: python get_bus.py
+
+      - name: 更新したJSONを保存
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add bus_position.json
+          git commit -m "バス情報を更新" || echo "変更なし"
+          git push
