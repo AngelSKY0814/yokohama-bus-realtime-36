@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>横浜市営バス リアルタイム表示</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:relative;min-height:2800px;overflow:auto}
+.line{position:absolute;left:330px;top:0;width:10px;height:8250px;background:#ff9900;border-radius:10px}
+.station{position:absolute;left:330px;width:30px;height:30px;background:#fff;border:5px solid #ff9900;border-radius:50%;z-index:5}
+.station-name{position:absolute;left:20px;width:27S0px;font-size:20px;font-weight:bold;line-height:90px}
+.bus{position:absolute;width:155px;min-height:58px;background:#0066cc;color:#fff;border-radius:12px;padding:6px 9px;font-size:15px;font-weight:bold;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.30);transition:top .8s ease,left .8s ease;z-index:100}
+.bus-left{left:145px}.bus-right{left:380px}
+.bus-id{font-size:14px}.bus-route{font-size:14px;margin-top:2px}.bus-destination{font-size:12px;margin-top:3px;line-height:16px}
+.info-panel{position:fixed;top:15px;right:15px;width:330px;max-height:calc(100vh - 30px);overflow:auto;background:#fff;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.25);padding:15px;z-index:1000}
+.info-title{font-size:24px;color:#0066cc;font-weight:bold;margin-bottom:12px}.info-label{color:#666;font-size:14px}.info-value{font-size:20px;font-weight:bold;margin-bottom:10px}.update{color:#008000}
+.bus-list{max-height:330px;overflow-y:auto;margin-top:10px}.bus-item{border-top:1px solid #ddd;padding:8px 0;font-size:14px}.bus-item strong{color:#0066cc}
+.status{font-size:13px;color:#666;margin-top:5px}
+
+/* スマホ向けレイアウト */
+@media (max-width: 700px){
+  body{min-height:2800px;overflow-x:hidden;overflow-y:auto;}
+
+  /* 画面幅に合わせて路線を配置 */
+  .line{left:50vw;width:8px;height:8250px;}
+  .station{left:calc(49vw - 5px);width:28px;height:28px;border-width:4px;}
+
+  /* 停留所名は左側に収める */
+  .station-name{
+    left:2vw;
+    width:30vw;
+    font-size:clamp(15px,0vw,20px);
+    line-height:25px;
+    text-align:left;
+    word-break:keep-all;
+    overflow-wrap:anywhere;
+  }
+
+  /* バスは画面幅に応じて自動縮小 */
+  .bus{
+    width:min(42vw,150px);
+    min-height:62px;
+    font-size:clamp(11px,3.5vw,14px);
+    padding:7px 8px;
+    border-radius:10px;
+  }
+  .bus-left{left:8vw;}
+  .bus-right{left:58vw;}
+  .bus-id,.bus-route{font-size:clamp(10px,3.2vw,13px);}
+  .bus-destination{font-size:clamp(9px,2.8vw,11px);line-height:15px;}
+
+  /* 上部情報パネルも画面内に収める */
+  .info-panel{
+    position:fixed;
+    top:-200px;//バス取得した情報
+    left:8px;
+    right:8px;
+    width:auto;
+    max-height:190px;
+    padding:10px;
+    border-radius:10px;
+  }
+  .info-title{font-size:18px;margin-bottom:5px;}
+  .info-label{font-size:11px;}
+  .info-value{font-size:16px;margin-bottom:5px;}
+  .bus-list{max-height:75px;margin-top:5px;}
+  .bus-item{padding:5px 0;font-size:11px;}
+  .status{font-size:10px;}
+}
+
+</style>
+</head>
+<body>
+<div class="line"></div>
+<div class="info-panel">
+  <div class="info-title">🚌 36系統</div>
+  <div class="info-label">現在運行中のバス</div>
+<div class="info-label">12系統は西菅田団地始発着便のみ表示</div>
+<div class="info-label">82系統、88系統神大寺入口始発着便は未表示</div>
+  <div class="info-value"><span id="busCount">取得中...</span> 台</div>
+  <div class="info-label">最終更新</div>
+  <div class="info-value update" id="updateTime">--:--:--</div>
+  <div class="status" id="routeStatus">路線情報を読み込んでいます...</div>
+  <div class="bus-list" id="busList">取得中...</div>
+</div>
+
+<script>
+/* ---------------------------------------
+   画面に表示する共通停留所
+---------------------------------------- */
+const stationNames=[
+  "緑車庫前","白山一丁目","鴨居橋","鴨居駅前",
+  "東通","南通","原通","菅田町",
+  "西菅田団地入口①","西菅田団地","西菅田団地入口②",
+  "ひまわり団地前","小川橋","道路碑前",
+  "中村","長導寺前","猿渡",
+  "神明社入口","熊の堂","菅田町入口","ケアプラザ入口",
+  "片倉下町","下耕地","片倉町駅前","片倉町","日枝橋","神奈川土木事務所前","神大寺",
+  "六角橋西町","神奈川大学入口","六角橋","西神奈川２丁目","東白楽",
+  "神奈川公会堂入口","東神奈川駅西口","二ツ谷町","反町","青木橋",
+  "鶴屋町２丁目","鶴屋町３丁目","横浜駅西口"
+
+];
+
+const displayTop={
+  "緑車庫前":100,"白山一丁目":300,"鴨居橋":500,"鴨居駅前":700,
+  "東通":900,"南通":1100,"原通":1300,"菅田町":1500,
+  "西菅田団地入口①":1700,"西菅田団地":1900,"西菅田団地入口②":2100,
+  "ひまわり団地前":2300,"小川橋":2500,"道路碑前":2700,
+  "中村":2900,"長導寺前":3100,"猿渡":3300,
+  "神明社入口":3500,"熊の堂":3700,"菅田町入口":3900,"ケアプラザ入口":4100,
+  "片倉下町":4300,"下耕地":4500,"片倉町駅前":4700,"片倉町":4900,"日枝橋":5100,"神奈川土木事務所前":5300,"神大寺":5500,
+  "六角橋西町":5700,"神奈川大学入口":5900,"六角橋":6100,"西神奈川２丁目":6300,"東白楽":6500,
+  "神奈川公会堂入口":6700,"東神奈川駅西口":6900,"二ツ谷町":7100,"反町":7300,"青木橋":7500,
+  "鶴屋町２丁目":7700,"鶴屋町３丁目":7900,"横浜駅西口":8100
+
+};
+
+for(const name of stationNames){
+  const s=document.createElement("div");
+  s.className="station"; s.style.top=displayTop[name]+"px";
+  document.body.appendChild(s);
+
+  const n=document.createElement("div");
+  n.className="station-name"; n.style.top=displayTop[name]+"px";
+  n.textContent=name;
+  document.body.appendChild(n);
+}
+
+let routeStopsData={};
+const busElements={};
+
+/* ---------------------------------------
+   route_stops.json
+---------------------------------------- */
+async function loadRouteStops(){
+  const response=await fetch("route_stops.json?"+Date.now(),{cache:"no-store"});
+  if(!response.ok) throw new Error("route_stops.json を読み込めません");
+  const data=await response.json();
+  if(!Array.isArray(data.routes)) throw new Error("route_stops.json の形式が正しくありません");
+
+  routeStopsData={};
+  for(const route of data.routes){
+    routeStopsData[String(route.courseId)]=route;
+  }
+
+  document.getElementById("routeStatus").textContent=
+    "16路線の停留所情報を読み込みました。";
+}
+
+/* ---------------------------------------
+   GPS距離計算
+---------------------------------------- */
+function toXY(lat,lon,baseLat){
+  const rlat=Number(lat)*Math.PI/180;
+  return {
+    x:Number(lon)*111320*Math.cos(Number(baseLat)*Math.PI/180),
+    y:Number(lat)*111320
+  };
+}
+
+function segmentInfo(a,b,lat,lon){
+  const base=(Number(a.latitude)+Number(b.latitude))/2;
+  const p=toXY(a.latitude,a.longitude,base);
+  const q=toXY(b.latitude,b.longitude,base);
+  const x=toXY(lat,lon,base);
+
+  const dx=q.x-p.x, dy=q.y-p.y;
+  const len2=dx*dx+dy*dy;
+
+  let t=0;
+  if(len2>0){
+    t=((x.x-p.x)*dx+(x.y-p.y)*dy)/len2;
+  }
+
+  t=Math.max(0,Math.min(1,t));
+
+  const nx=p.x+dx*t, ny=p.y+dy*t;
+  const error=Math.hypot(x.x-nx,x.y-ny);
+  const length=Math.sqrt(len2);
+
+  return {t,error,length};
+}
+
+function distance(a,b){
+  const base=(Number(a.latitude)+Number(b.latitude))/2;
+  const p=toXY(a.latitude,a.longitude,base);
+  const q=toXY(b.latitude,b.longitude,base);
+  return Math.hypot(q.x-p.x,q.y-p.y);
+}
+
+/* ---------------------------------------
+   その路線の停留所を画面topへ対応させる
+
+   共通停留所は既存の画面位置を使用。
+   路線固有停留所は、その路線上の距離比から補間。
+---------------------------------------- */
+function buildScreenRoute(route){
+  const stops=route.stops;
+  if(!Array.isArray(stops)||stops.length<2) return null;
+
+  const cum=[0];
+  for(let i=0;i<stops.length-1;i++){
+    cum.push(cum[i]+distance(stops[i],stops[i+1]));
+  }
+
+  const anchors=[];
+  for(let i=0;i<stops.length;i++){
+    const top=displayTop[stops[i].name];
+    if(top!==undefined){
+      anchors.push({index:i,distance:cum[i],top,name:stops[i].name});
+    }
+  }
+
+  if(anchors.length<2) return null;
+
+  const tops=new Array(stops.length);
+
+  /* 共通停留所 */
+  for(const a of anchors) tops[a.index]=a.top;
+
+  /* 最初の表示停留所より前 */
+  for(let i=anchors[0].index-1;i>=0;i--){
+    tops[i]=tops[i+1]-200;
+  }
+
+  /* 表示停留所間 */
+  for(let k=0;k<anchors.length-1;k++){
+    const a=anchors[k],b=anchors[k+1];
+    const span=b.distance-a.distance;
+
+    for(let i=a.index+1;i<b.index;i++){
+      const t=span>0?(cum[i]-a.distance)/span:0;
+      tops[i]=a.top+(b.top-a.top)*t;
+    }
+  }
+
+  /* 最後の表示停留所より後 */
+  const last=anchors[anchors.length-1];
+  for(let i=last.index+1;i<stops.length;i++){
+    tops[i]=tops[i-1]-200;
+  }
+
+  return stops.map((stop,i)=>({
+    ...stop,
+    index:i,
+    cumulativeDistance:cum[i],
+    top:tops[i]
+  }));
+}
+
+/* ---------------------------------------
+   バスGPSを路線の線分上へ投影
+---------------------------------------- */
+function projectBus(bus,route){
+  const rs=buildScreenRoute(route);
+  if(!rs) return null;
+
+  let best=null;
+
+  for(let i=0;i<rs.length-1;i++){
+    const a=rs[i],b=rs[i+1];
+    const info=segmentInfo(
+      a,b,
+      Number(bus.latitude),
+      Number(bus.longitude)
+    );
+
+    const routeDistance=
+      a.cumulativeDistance+
+      info.length*info.t;
+
+    if(!best||info.error<best.error){
+      best={
+        error:info.error,
+        ratio:info.t,
+        segmentIndex:i,
+        routeDistance,
+        stops:rs
+      };
+    }
+  }
+
+  return best;
+}
+
+/* ---------------------------------------
+   路線上の距離から画面topを求める
+---------------------------------------- */
+function routeDistanceToTop(projected){
+  if(!projected) return null;
+
+  const rs=projected.stops;
+  const i=projected.segmentIndex;
+
+  const a=rs[i],b=rs[i+1];
+  const raw=a.top+(b.top-a.top)*projected.ratio;
+
+  const margin=45;
+  const low=Math.min(a.top,b.top)+margin;
+  const high=Math.max(a.top,b.top)-margin;
+
+  if(high<low) return (a.top+b.top)/2;
+
+  return Math.max(low,Math.min(high,raw));
+}
+
+function getAccurateBusTop(bus){
+  const route=routeStopsData[String(bus.courseId)];
+  if(!route) return null;
+
+  const projected=projectBus(bus,route);
+  if(!projected) return null;
+
+  /*
+    GPSが路線から大きく外れている場合でも
+    完全に消さず、最近区間に表示する。
+    これで実際のバスを突然消すことを防ぐ。
+  */
+  return routeDistanceToTop(projected);
+}
+
+/* ---------------------------------------
+   バス作成・更新
+---------------------------------------- */
+function createBus(bus){
+  const div=document.createElement("div");
+  div.className="bus bus-right";
+  div.id="bus-"+String(bus.id);
+
+  div.innerHTML=
+    "<div class='bus-id'>🚌 "+String(bus.id)+"</div>"+
+    "<div class='bus-route'></div>"+
+    "<div class='bus-destination'></div>";
+
+  document.body.appendChild(div);
+  busElements[String(bus.id)]=div;
+  return div;
+}
+
+function updateBusPosition(bus){
+  const id=String(bus.id);
+  let element=busElements[id];
+
+  if(!element) element=createBus(bus);
+
+  const top=getAccurateBusTop(bus);
+
+  if(top===null){
+    element.style.display="none";
+    return;
+  }
+
+  element.style.display="block";
+  element.style.top=top+"px";
+
+  if(String(bus.direction)==="up"){
+    element.classList.remove("bus-right");
+    element.classList.add("bus-left");
+  }else{
+    element.classList.remove("bus-left");
+    element.classList.add("bus-right");
+  }
+
+  element.querySelector(".bus-route").textContent=bus.route||"";
+  element.querySelector(".bus-destination").textContent=bus.destination||"";
+}
+
+function removeOldBuses(buses){
+  const ids=new Set(buses.map(b=>String(b.id)));
+
+  for(const id in busElements){
+    if(!ids.has(id)){
+      busElements[id].remove();
+      delete busElements[id];
+    }
+  }
+}
+
+/* ---------------------------------------
+   bus_position.json
+---------------------------------------- */
+async function updateBus(){
+  try{
+    const response=await fetch(
+      "bus_position.json?"+Date.now(),
+      {cache:"no-store"}
+    );
+
+    if(!response.ok){
+      throw new Error("bus_position.json を読み込めません");
+    }
+
+    const data=await response.json();
+    const buses=Array.isArray(data.buses)?data.buses:[];
+
+    document.getElementById("busCount").textContent=buses.length;
+    document.getElementById("updateTime").textContent=
+      data.updated||new Date().toLocaleTimeString("ja-JP");
+
+    removeOldBuses(buses);
+
+    for(const bus of buses){
+      updateBusPosition(bus);
+    }
+
+    const list=document.getElementById("busList");
+    list.innerHTML="";
+
+    if(buses.length===0){
+      list.textContent="現在運行中のバスはありません。";
+      return;
+    }
+
+    for(const bus of buses){
+      const item=document.createElement("div");
+      item.className="bus-item";
+
+      const side=
+        String(bus.direction)==="up"
+          ? "左側 ↑"
+          : "右側 ↓";
+
+      item.innerHTML=
+        "<strong>"+String(bus.id)+"</strong> "+side+
+        "<br>"+(bus.route||"")+
+        "<br>"+(bus.destination||"")+
+        "<br>緯度: "+bus.latitude+
+        "<br>経度: "+bus.longitude;
+
+      list.appendChild(item);
+    }
+
+  }catch(error){
+    console.error(error);
+
+    document.getElementById("busCount").textContent="取得失敗";
+    document.getElementById("updateTime").textContent="--:--:--";
+    document.getElementById("routeStatus").textContent=error.message;
+    document.getElementById("busList").textContent=error.message;
+  }
+}
+
+/* ---------------------------------------
+   起動
+---------------------------------------- */
+async function start(){
+  try{
+    await loadRouteStops();
+    await updateBus();
+    setInterval(updateBus,5000);
+  }catch(error){
+    console.error(error);
+    document.getElementById("busCount").textContent="取得失敗";
+    document.getElementById("routeStatus").textContent=error.message;
+    document.getElementById("busList").textContent=error.message;
+  }
+}
+
+start();
+</script>
+</body>
+</html>
