@@ -384,9 +384,10 @@ function removeOldBuses(buses){
 async function updateBus(){
   try{
     const response=await fetch(
-      "bus_position.json?"+Date.now(),
-      {cache:"no-store"}
-    );
+"https://raw.githubusercontent.com/AngelSKY0814/yokohama-bus-realtime-36/main/bus_position.json?"+Date.now(),
+{cache:"no-store"}
+);
+
 
     if(!response.ok){
       throw new Error("bus_position.json を読み込めません");
