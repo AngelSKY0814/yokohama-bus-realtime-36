@@ -1,7 +1,6 @@
 name: バス情報自動更新
 
 on:
-  schedule:
 schedule:
   - cron: "2/5 * * * *"
   workflow_dispatch:
