@@ -1,92 +1,92 @@
 {
-  "updated": "2026-09-11 01:24:40",
-  "count": 13,
+  "updated": "2026-09-11 06:26:52",
+  "count": 12,
   "buses": [
     {
-      "id": "1786",
-      "latitude": 35.486765500000004,
-      "longitude": 139.6173335,
-      "route": "36系統",
-      "destination": "西菅田団地経由 緑車庫前行",
-      "courseId": "0001600237",
-      "direction": "up"
-    },
-    {
-      "id": "1666",
-      "latitude": 35.506279,
-      "longitude": 139.568107,
-      "route": "36系統",
-      "destination": "西菅田団地経由 緑車庫前行",
-      "courseId": "0001600237",
-      "direction": "up"
-    },
-    {
-      "id": "3443",
-      "latitude": 35.499721,
-      "longitude": 139.596408,
-      "route": "36系統",
-      "destination": "西菅田団地経由 緑車庫前行",
-      "courseId": "0001600626",
-      "direction": "up"
-    },
-    {
       "id": "1306",
-      "latitude": 35.476842,
-      "longitude": 139.6311455,
+      "latitude": 35.4912125,
+      "longitude": 139.6071905,
+      "route": "36系統",
+      "destination": "西菅田団地経由 緑車庫前行",
+      "courseId": "0001600237",
+      "direction": "up"
+    },
+    {
+      "id": "1339",
+      "latitude": 35.509285500000004,
+      "longitude": 139.567686,
+      "route": "36系統",
+      "destination": "西菅田団地経由 緑車庫前行",
+      "courseId": "0001600237",
+      "direction": "up"
+    },
+    {
+      "id": "1823",
+      "latitude": 35.495599999999996,
+      "longitude": 139.603943,
       "route": "36系統",
       "destination": "菅田町経由 緑車庫前行",
       "courseId": "0001600557",
       "direction": "up"
     },
     {
-      "id": "1866",
-      "latitude": 35.502514500000004,
-      "longitude": 139.57678049999998,
+      "id": "3908",
+      "latitude": 35.4798335,
+      "longitude": 139.6318775,
       "route": "36系統",
-      "destination": "菅田町経由 緑車庫前行",
-      "courseId": "0001600557",
+      "destination": "六角橋経由 西菅田団地行",
+      "courseId": "0001601358",
       "direction": "up"
     },
     {
-      "id": "1944",
-      "latitude": 35.507712999999995,
-      "longitude": 139.55936,
+      "id": "1867",
+      "latitude": 35.509907,
+      "longitude": 139.5652675,
       "route": "12系統",
       "destination": "緑車庫前経由 西菅田団地行",
       "courseId": "0001601079",
       "direction": "nishisugeta"
     },
     {
-      "id": "1937",
-      "latitude": 35.495073500000004,
-      "longitude": 139.6038345,
+      "id": "3503",
+      "latitude": 35.493246,
+      "longitude": 139.607258,
       "route": "82系統",
       "destination": "六角橋経由 八反橋行",
       "courseId": "0001600577",
       "direction": "up"
     },
     {
-      "id": "3940",
-      "latitude": 35.487828,
-      "longitude": 139.61057,
+      "id": "1809",
+      "latitude": 35.4688995,
+      "longitude": 139.620306,
+      "route": "82系統",
+      "destination": "六角橋経由 横浜駅西口行",
+      "courseId": "0001600012",
+      "direction": "yokohama"
+    },
+    {
+      "id": "1718",
+      "latitude": 35.503446,
+      "longitude": 139.5727205,
       "route": "36系統",
       "destination": "菅田町経由 横浜駅西口行",
       "courseId": "0001600563",
       "direction": "yokohama"
     },
     {
-      "id": "3472",
-      "latitude": 35.503446,
-      "longitude": 139.5727205,
+      "id": "1994",
+      "latitude": 35.497750499999995,
+      "longitude": 139.60186449999998,
       "route": "36系統",
       "destination": "西菅田団地経由 横浜駅西口行",
       "courseId": "0001600224",
       "direction": "yokohama"
     },
     {
-      "id": "1339",
-      "latitude": 35.4997165,
-      "longitude": 139.5966305,
+      "id": "1307",
+      "latitude": 35.4907085,
+      "longitude": 139.60708549999998,
       "route": "36系統",
       "destination": "西菅田団地経由 横浜駅西口行",
       "courseId": "0001600224",
@@ -94,24 +94,15 @@
     },
     {
       "id": "3433",
-      "latitude": 35.486540000000005,
-      "longitude": 139.625115,
+      "latitude": 35.4740135,
+      "longitude": 139.6293225,
       "route": "36系統",
       "destination": "西菅田団地経由 横浜駅西口行",
       "courseId": "0001600224",
       "direction": "yokohama"
     },
     {
-      "id": "3370",
-      "latitude": 35.471883,
-      "longitude": 139.62739499999998,
-      "route": "36系統",
-      "destination": "西菅田団地経由 横浜駅西口行",
-      "courseId": "0001600224",
-      "direction": "yokohama"
-    },
-    {
-      "id": "1867",
+      "id": "1905",
       "latitude": 35.511821,
       "longitude": 139.54299300000002,
       "route": "12系統",
