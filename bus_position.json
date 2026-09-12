@@ -1,24 +1,5 @@
 {
-  "updated": "2026-09-12 14:02:45",
-  "count": 2,
-  "buses": [
-    {
-      "id": "3945",
-      "latitude": 35.4871335,
-      "longitude": 139.613382,
-      "route": "36系統",
-      "destination": "西菅田団地経由 緑車庫前行",
-      "courseId": "0001600237",
-      "direction": "up"
-    },
-    {
-      "id": "1821",
-      "latitude": 35.504147,
-      "longitude": 139.569334,
-      "route": "36系統",
-      "destination": "西菅田団地経由 緑車庫前行",
-      "courseId": "0001600237",
-      "direction": "up"
-    }
-  ]
+  "updated": "2026-09-12 17:04:16",
+  "count": 0,
+  "buses": []
 }
