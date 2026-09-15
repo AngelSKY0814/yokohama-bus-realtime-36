@@ -1283,6 +1283,90 @@
         }
       ]
     },
+      {
+      "courseId": "0001601391",
+      "route": "295系統",
+      "destination": "新横浜駅前行",
+      "direction": "shinyokohama",
+      "stopCount": 15,
+      "stops": [
+        {
+          "name": "西菅田団地",
+          "latitude": 35.497969,
+          "longitude": 139.574025
+        },
+        {
+          "name": "西菅田団地入口",
+          "latitude": 35.500523,
+          "longitude": 139.576491
+        },
+        {
+          "name": "ひまわり団地前",
+          "latitude": 35.502028,
+          "longitude": 139.5793
+        },
+        {
+          "name": "小川橋",
+          "latitude": 35.500676,
+          "longitude": 139.582431
+        },
+        {
+          "name": "道路碑前",
+          "latitude": 35.500981,
+          "longitude": 139.584575
+        },
+        {
+          "name": "中村",
+          "latitude": 35.500812,
+          "longitude": 139.587806
+        },
+        {
+          "name": "長導寺前",
+          "latitude": 35.500609,
+          "longitude": 139.591896
+        },
+        {
+          "name": "猿渡",
+          "latitude": 35.499798,
+          "longitude": 139.59471
+        },
+        {
+          "name": "神明社入口",
+          "latitude": 35.499635,
+          "longitude": 139.598551
+        },
+        {
+          "name": "熊の堂",
+          "latitude": 35.498504,
+          "longitude": 139.600991
+        },
+        {
+          "name": "菅田町入口",
+          "latitude": 35.496997,
+          "longitude": 139.602738
+        },
+        {
+          "name": "ケアプラザ入口",
+          "latitude": 35.495047,
+          "longitude": 139.605101
+        },
+        {
+          "name": "山王森公園前",
+          "latitude": 35.497617,
+          "longitude": 139.607398
+        },
+        {
+          "name": "又口橋",
+          "latitude": 35.501314,
+          "longitude": 139.607948
+        },
+        {
+          "name": "新横浜駅前",
+          "latitude": 35.508244,
+          "longitude": 139.617319
+        }
+      ]
+    },
     {
             "courseId": "0001600340",
       "route": "326系統急行",
@@ -2918,6 +3002,90 @@
           "name": "菅田町",
           "latitude": 35.503164,
           "longitude": 139.574461
+        },
+        {
+          "name": "西菅田団地入口",
+          "latitude": 35.500061,
+          "longitude": 139.576223
+        },
+        {
+          "name": "西菅田団地",
+          "latitude": 35.498008,
+          "longitude": 139.574229
+        }
+      ]
+    },
+      {
+      "courseId": "0001601392",
+      "route": "295系統",
+      "destination": "西菅田団地行",
+      "direction": "up",
+      "stopCount": 15,
+      "stops": [
+        {
+          "name": "新横浜駅前",
+          "latitude": 35.507914,
+          "longitude": 139.616864
+        },
+        {
+          "name": "又口橋",
+          "latitude": 35.503094,
+          "longitude": 139.610128
+        },
+        {
+          "name": "山王森公園前",
+          "latitude": 35.497644,
+          "longitude": 139.607565
+        },
+        {
+          "name": "ケアプラザ入口",
+          "latitude": 35.495003,
+          "longitude": 139.604956
+        },
+        {
+          "name": "菅田町入口",
+          "latitude": 35.496197,
+          "longitude": 139.60293
+        },
+        {
+          "name": "熊の堂",
+          "latitude": 35.499149,
+          "longitude": 139.59991
+        },
+        {
+          "name": "神明社入口",
+          "latitude": 35.499727,
+          "longitude": 139.597671
+        },
+        {
+          "name": "猿渡",
+          "latitude": 35.499715,
+          "longitude": 139.595145
+        },
+        {
+          "name": "長導寺前",
+          "latitude": 35.500514,
+          "longitude": 139.591264
+        },
+        {
+          "name": "中村",
+          "latitude": 35.500517,
+          "longitude": 139.587267
+        },
+        {
+          "name": "道路碑前",
+          "latitude": 35.500866,
+          "longitude": 139.584865
+        },
+        {
+          "name": "小川橋",
+          "latitude": 35.500566,
+          "longitude": 139.582729
+        },
+        {
+          "name": "ひまわり団地前",
+          "latitude": 35.501931,
+          "longitude": 139.579215
         },
         {
           "name": "西菅田団地入口",
