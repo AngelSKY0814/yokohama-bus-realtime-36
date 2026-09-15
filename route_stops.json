@@ -1284,6 +1284,150 @@
       ]
     },
     {
+            "courseId": "0001600340",
+      "route": "326系統急行",
+      "destination": "西菅田団地経由 横浜駅西口行",
+      "direction": "yokohama",
+      "stopCount": 27,
+      "stops": [
+        {
+          "name": "緑車庫前",
+          "latitude": 35.506643,
+          "longitude": 139.558419
+        },
+        {
+          "name": "白山一丁目",
+          "latitude": 35.508783,
+          "longitude": 139.560301
+        },
+        {
+          "name": "鴨居橋",
+          "latitude": 35.509494,
+          "longitude": 139.563101
+        },
+        {
+          "name": "鴨居駅前",
+          "latitude": 35.51032,
+          "longitude": 139.567434
+        },
+        {
+          "name": "東通",
+          "latitude": 35.507251,
+          "longitude": 139.568346
+        },
+        {
+          "name": "南通（緑区）",
+          "latitude": 35.504418,
+          "longitude": 139.568277
+        },
+        {
+          "name": "原通",
+          "latitude": 35.503728,
+          "longitude": 139.57098
+        },
+        {
+          "name": "菅田町",
+          "latitude": 35.503164,
+          "longitude": 139.574461
+        },
+        {
+          "name": "西菅田団地入口",
+          "latitude": 35.500061,
+          "longitude": 139.576223
+        },
+        {
+          "name": "西菅田団地",
+          "latitude": 35.497969,
+          "longitude": 139.574025
+        },
+        {
+          "name": "西菅田団地入口",
+          "latitude": 35.500523,
+          "longitude": 139.576491
+        },
+        {
+          "name": "ひまわり団地前",
+          "latitude": 35.502028,
+          "longitude": 139.5793
+        },
+        {
+          "name": "小川橋",
+          "latitude": 35.500676,
+          "longitude": 139.582431
+        },
+        {
+          "name": "道路碑前",
+          "latitude": 35.500981,
+          "longitude": 139.584575
+        },
+        {
+          "name": "中村",
+          "latitude": 35.500812,
+          "longitude": 139.587806
+        },
+        {
+          "name": "長導寺前",
+          "latitude": 35.500609,
+          "longitude": 139.591896
+        },
+        {
+          "name": "猿渡",
+          "latitude": 35.499798,
+          "longitude": 139.59471
+        },
+        {
+          "name": "神明社入口",
+          "latitude": 35.499635,
+          "longitude": 139.598551
+        },
+        {
+          "name": "熊の堂",
+          "latitude": 35.498504,
+          "longitude": 139.600991
+        },
+        {
+          "name": "菅田町入口",
+          "latitude": 35.496997,
+          "longitude": 139.602738
+        },
+        {
+          "name": "片倉町駅前",
+          "latitude": 35.490219,
+          "longitude": 139.606881
+        },
+        {
+          "name": "神大寺",
+          "latitude": 35.486943,
+          "longitude": 139.616143
+        },
+        {
+          "name": "六角橋西町",
+          "latitude": 35.486788,
+          "longitude": 139.61854
+        },
+        {
+          "name": "神奈川大学入口",
+          "latitude": 35.486939,
+          "longitude": 139.623691
+        },
+        {
+          "name": "東白楽",
+          "latitude": 35.482808,
+          "longitude": 139.629752
+        },
+        {
+          "name": "東神奈川駅西口",
+          "latitude": 35.478297,
+          "longitude": 139.633033
+        },
+        {
+          "name": "横浜駅西口",
+          "latitude": 35.466408,
+          "longitude": 139.621193
+    }
+      ]
+    },
+    {
       "courseId": "0001600237",
       "route": "36系統",
       "destination": "西菅田団地経由 緑車庫前行",
