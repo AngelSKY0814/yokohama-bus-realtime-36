@@ -1283,6 +1283,135 @@
         }
       ]
     },
+     {
+      "courseId": "0001601414",
+      "route": "36系統",
+      "destination": "西菅田団地経由 片倉町駅前行",
+      "direction": "katakuratyou",
+      "stopCount": 24,
+      "stops": [
+        {
+          "name": "緑車庫前",
+          "latitude": 35.506643,
+          "longitude": 139.558419
+        },
+        {
+          "name": "白山一丁目",
+          "latitude": 35.508783,
+          "longitude": 139.560301
+        },
+        {
+          "name": "鴨居橋",
+          "latitude": 35.509494,
+          "longitude": 139.563101
+        },
+        {
+          "name": "鴨居駅前",
+          "latitude": 35.51032,
+          "longitude": 139.567434
+        },
+        {
+          "name": "東通",
+          "latitude": 35.507251,
+          "longitude": 139.568346
+        },
+        {
+          "name": "南通（緑区）",
+          "latitude": 35.504418,
+          "longitude": 139.568277
+        },
+        {
+          "name": "原通",
+          "latitude": 35.503728,
+          "longitude": 139.57098
+        },
+        {
+          "name": "菅田町",
+          "latitude": 35.503164,
+          "longitude": 139.574461
+        },
+        {
+          "name": "西菅田団地入口",
+          "latitude": 35.500061,
+          "longitude": 139.576223
+        },
+        {
+          "name": "西菅田団地",
+          "latitude": 35.497969,
+          "longitude": 139.574025
+        },
+        {
+          "name": "西菅田団地入口",
+          "latitude": 35.500523,
+          "longitude": 139.576491
+        },
+        {
+          "name": "ひまわり団地前",
+          "latitude": 35.502028,
+          "longitude": 139.5793
+        },
+        {
+          "name": "小川橋",
+          "latitude": 35.500676,
+          "longitude": 139.582431
+        },
+        {
+          "name": "道路碑前",
+          "latitude": 35.500981,
+          "longitude": 139.584575
+        },
+        {
+          "name": "中村",
+          "latitude": 35.500812,
+          "longitude": 139.587806
+        },
+        {
+          "name": "長導寺前",
+          "latitude": 35.500609,
+          "longitude": 139.591896
+        },
+        {
+          "name": "猿渡",
+          "latitude": 35.499798,
+          "longitude": 139.59471
+        },
+        {
+          "name": "神明社入口",
+          "latitude": 35.499635,
+          "longitude": 139.598551
+        },
+        {
+          "name": "熊の堂",
+          "latitude": 35.498504,
+          "longitude": 139.600991
+        },
+        {
+          "name": "菅田町入口",
+          "latitude": 35.496997,
+          "longitude": 139.602738
+        },
+        {
+          "name": "ケアプラザ入口",
+          "latitude": 35.495047,
+          "longitude": 139.605101
+        },
+        {
+          "name": "片倉下町",
+          "latitude": 35.494395,
+          "longitude": 139.607472
+        },
+        {
+          "name": "下耕地",
+          "latitude": 35.491198,
+          "longitude": 139.60729
+        },
+        {
+          "name": "片倉町駅前",
+          "latitude": 35.490219,
+          "longitude": 139.606881
+        }
+      ]
+    },
       {
       "courseId": "0001601391",
       "route": "295系統",
@@ -2160,6 +2289,120 @@
           "latitude": 35.489783,
           "longitude": 139.607807
         },
+        {
+          "name": "片倉町駅前",
+          "latitude": 35.490328,
+          "longitude": 139.607155
+        },
+        {
+          "name": "下耕地",
+          "latitude": 35.492097,
+          "longitude": 139.607226
+        },
+        {
+          "name": "片倉下町",
+          "latitude": 35.494395,
+          "longitude": 139.60729
+        },
+        {
+          "name": "ケアプラザ入口",
+          "latitude": 35.495003,
+          "longitude": 139.604956
+        },
+        {
+          "name": "菅田町入口",
+          "latitude": 35.496197,
+          "longitude": 139.60293
+        },
+        {
+          "name": "熊の堂",
+          "latitude": 35.499149,
+          "longitude": 139.59991
+        },
+        {
+          "name": "神明社入口",
+          "latitude": 35.499727,
+          "longitude": 139.597671
+        },
+        {
+          "name": "猿渡",
+          "latitude": 35.499715,
+          "longitude": 139.595145
+        },
+        {
+          "name": "長導寺前",
+          "latitude": 35.500514,
+          "longitude": 139.591264
+        },
+        {
+          "name": "中村",
+          "latitude": 35.500517,
+          "longitude": 139.587267
+        },
+        {
+          "name": "道路碑前",
+          "latitude": 35.500866,
+          "longitude": 139.584865
+        },
+        {
+          "name": "小川橋",
+          "latitude": 35.500566,
+          "longitude": 139.582729
+        },
+        {
+          "name": "ひまわり団地前",
+          "latitude": 35.501931,
+          "longitude": 139.579215
+        },
+        {
+          "name": "菅田町",
+          "latitude": 35.503098,
+          "longitude": 139.574346
+        },
+        {
+          "name": "原通",
+          "latitude": 35.503684,
+          "longitude": 139.570648
+        },
+        {
+          "name": "南通（緑区）",
+          "latitude": 35.50461,
+          "longitude": 139.56802
+        },
+        {
+          "name": "東通",
+          "latitude": 35.507948,
+          "longitude": 139.568194
+        },
+        {
+          "name": "鴨居駅前",
+          "latitude": 35.510623,
+          "longitude": 139.567178
+        },
+        {
+          "name": "鴨居橋",
+          "latitude": 35.5094,
+          "longitude": 139.563082
+        },
+        {
+          "name": "白山一丁目",
+          "latitude": 35.508293,
+          "longitude": 139.559876
+        },
+        {
+          "name": "緑車庫前",
+          "latitude": 35.506643,
+          "longitude": 139.558419
+        }
+      ]
+    },
+     {
+      "courseId": "0001600441",
+      "route": "36系統",
+      "destination": "菅田町経由 緑車庫前行",
+      "direction": "up",
+      "stopCount": 21,
+      "stops": [
         {
           "name": "片倉町駅前",
           "latitude": 35.490328,
