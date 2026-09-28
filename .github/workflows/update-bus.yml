@@ -1,8 +1,12 @@
 name: バス情報自動更新
+
 on:
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   update:
@@ -28,5 +32,5 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add bus_position.json
-          git commit -m "バス情報を更新" || echo "変更なし"
+          git diff --cached --quiet || git commit -m "バス情報を更新"
           git push
