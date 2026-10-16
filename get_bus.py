@@ -43,11 +43,41 @@ courses = [
     "direction": "up"
 },
 {
-    "courseId": "0001601357",
+    "courseId": "0001601358",
     "route": "36系統",
     "destination": "六角橋経由 西菅田団地行",
     "direction": "up"
 },
+{
+    "courseId": "0001600014",
+    "route": "36系統",
+    "destination": "西菅田団地経由 菅田町行",
+    "direction": "up"
+},
+{
+    "courseId": "0001600394",
+    "route": "36系統",
+    "destination": "六角橋経由 菅田町行",
+    "direction": "up"
+},
+{
+    "courseId": "0001600514",
+    "route": "36系統",
+    "destination": "西菅田団地経由 菅田町行",
+    "direction": "up"
+},    
+{
+    "courseId": "0001600417",
+    "route": "36系統",
+    "destination": "六角橋経由 菅田町行",
+    "direction": "up"
+},    
+{
+    "courseId": "0001600567",
+    "route": "377系統深夜バス",
+    "destination": "西菅田団地経由 緑車庫前行",
+    "direction": "up"
+},    
 {
         "courseId": "0001601079",
         "route": "12系統",
@@ -108,13 +138,31 @@ courses = [
         "direction": "yokohama"
     },
     {
+        "courseId": "0001600466",
+        "route": "36系統",
+        "destination": "六角橋経由 横浜駅西口行",
+        "direction": "yokohama"
+    },
+    {
         "courseId": "0001600563",
         "route": "36系統",
         "destination": "菅田町経由 横浜駅西口行",
         "direction": "yokohama"
     },
+     {
+        "courseId": "0001600205",
+        "route": "36系統",
+        "destination": "西菅田団地経由 横浜駅西口行",
+        "direction": "yokohama"
+    },
  {
         "courseId": "0001600340",
+        "route": "326系統急行",
+        "destination": "西菅田団地経由 横浜駅西口行",
+        "direction": "yokohama"
+    },
+     {
+        "courseId": "0001600583",
         "route": "326系統急行",
         "destination": "西菅田団地経由 横浜駅西口行",
         "direction": "yokohama"
@@ -132,6 +180,12 @@ courses = [
         "destination": "六角橋経由 東神奈川駅西口行",
         "direction": "higashikanagawa"
     },
+     {
+        "courseId": "0001600235",
+        "route": "36系統",
+        "destination": "六角橋経由 東神奈川駅西口行",
+        "direction": "higashikanagawa"
+    },
     {
         "courseId": "0001600311",
         "route": "36系統",
@@ -144,10 +198,22 @@ courses = [
         "destination": "西菅田団地経由 東神奈川駅西口行",
         "direction": "higashikanagawa"
     },
+    {
+        "courseId": "0001600541",
+        "route": "36系統",
+        "destination": "西菅田団地経由 東神奈川駅西口行",
+        "direction": "higashikanagawa"
+    },
  {
         "courseId": "0001601414",
         "route": "36系統",
         "destination": "西菅田団地経由 片倉町駅前行",
+        "direction": "katakuratyou"
+    },
+    {
+        "courseId": "0001600244",
+        "route": "36系統",
+        "destination": "菅田町経由 片倉町駅前行",
         "direction": "katakuratyou"
     },
   {
