@@ -1,5 +1,15 @@
 {
-  "updated": "2026-10-17 18:25:32",
-  "count": 0,
-  "buses": []
+  "updated": "2026-10-17 20:51:59",
+  "count": 1,
+  "buses": [
+    {
+      "id": "1906",
+      "latitude": 35.5087855,
+      "longitude": 139.56788999999998,
+      "route": "12系統",
+      "destination": "西菅田団地行",
+      "courseId": "0001600429",
+      "direction": "nishisugeta"
+    }
+  ]
 }
