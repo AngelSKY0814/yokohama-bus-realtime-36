@@ -1417,7 +1417,7 @@
       "route": "295系統",
       "destination": "新横浜駅前行",
       "direction": "shinyokohama",
-      "stopCount": 15,
+      "stopCount": 12,
       "stops": [
         {
           "name": "西菅田団地",
