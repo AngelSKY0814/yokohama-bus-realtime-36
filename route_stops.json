@@ -2804,7 +2804,7 @@
       "route": "82系統",
       "destination": "六角橋経由 八反橋行",
       "direction": "up",
-      "stopCount": 22,
+      "stopCount": 21,
       "stops": [
         {
           "name": "横浜駅西口",
@@ -2918,7 +2918,7 @@
       "route": "82系統",
       "destination": "六角橋経由 八反橋行",
       "direction": "up",
-      "stopCount": 17,
+      "stopCount": 16,
       "stops": [
         {
           "name": "東神奈川駅西口",
@@ -3239,23 +3239,8 @@
       "route": "295系統",
       "destination": "西菅田団地行",
       "direction": "up",
-      "stopCount": 15,
+      "stopCount": 12,
       "stops": [
-        {
-          "name": "新横浜駅前",
-          "latitude": 35.507914,
-          "longitude": 139.616864
-        },
-        {
-          "name": "又口橋",
-          "latitude": 35.503094,
-          "longitude": 139.610128
-        },
-        {
-          "name": "山王森公園前",
-          "latitude": 35.497644,
-          "longitude": 139.607565
-        },
         {
           "name": "ケアプラザ入口",
           "latitude": 35.495003,
