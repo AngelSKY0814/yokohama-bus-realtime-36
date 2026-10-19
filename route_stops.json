@@ -1412,6 +1412,76 @@
         }
       ]
     },
+          {
+      "courseId": "0001601391",
+      "route": "295系統",
+      "destination": "新横浜駅前行",
+      "direction": "shinyokohama",
+      "stopCount": 12,
+      "stops": [
+        {
+          "name": "西菅田団地",
+          "latitude": 35.497969,
+          "longitude": 139.574025
+        },
+        {
+          "name": "西菅田団地入口",
+          "latitude": 35.500523,
+          "longitude": 139.576491
+        },
+        {
+          "name": "ひまわり団地前",
+          "latitude": 35.502028,
+          "longitude": 139.5793
+        },
+        {
+          "name": "小川橋",
+          "latitude": 35.500676,
+          "longitude": 139.582431
+        },
+        {
+          "name": "道路碑前",
+          "latitude": 35.500981,
+          "longitude": 139.584575
+        },
+        {
+          "name": "中村",
+          "latitude": 35.500812,
+          "longitude": 139.587806
+        },
+        {
+          "name": "長導寺前",
+          "latitude": 35.500609,
+          "longitude": 139.591896
+        },
+        {
+          "name": "猿渡",
+          "latitude": 35.499798,
+          "longitude": 139.59471
+        },
+        {
+          "name": "神明社入口",
+          "latitude": 35.499635,
+          "longitude": 139.598551
+        },
+        {
+          "name": "熊の堂",
+          "latitude": 35.498504,
+          "longitude": 139.600991
+        },
+        {
+          "name": "菅田町入口",
+          "latitude": 35.496997,
+          "longitude": 139.602738
+        },
+        {
+          "name": "ケアプラザ入口",
+          "latitude": 35.495047,
+          "longitude": 139.605101
+        }
+      ]
+    },
+
     {
             "courseId": "0001600340",
       "route": "326系統急行",
