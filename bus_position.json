@@ -1,15 +1,5 @@
 {
-  "updated": "2026-10-25 13:56:58",
-  "count": 1,
-  "buses": [
-    {
-      "id": "1823",
-      "latitude": 35.495599999999996,
-      "longitude": 139.603943,
-      "route": "36系統",
-      "destination": "菅田町経由 緑車庫前行",
-      "courseId": "0001600557",
-      "direction": "up"
-    }
-  ]
+  "updated": "2026-10-25 17:33:20",
+  "count": 0,
+  "buses": []
 }
