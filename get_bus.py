@@ -110,31 +110,31 @@ courses = [
 {
     "courseId": "0001600577",
     "route": "82系統",
-    "destination": "六角橋経由 八反橋行",
+    "destination": "片倉町駅前経由 八反橋行",
     "direction": "up"
 },
 {
     "courseId": "0001600251",
     "route": "82系統",
-    "destination": "六角橋経由 八反橋行",
+    "destination": "片倉町駅前経由 八反橋行",
     "direction": "up"
     },
     {
         "courseId": "0001600012",
         "route": "82系統",
-        "destination": "六角橋経由 横浜駅西口行",
+        "destination": "片倉町駅前経由 横浜駅西口行",
         "direction": "yokohama"
     },
     {
         "courseId": "0001600145",
         "route": "82系統",
-        "destination": "六角橋経由 東神奈川駅西口行",
+        "destination": "片倉町駅前経由 東神奈川駅西口行",
         "direction": "higashikanagawa"
     },
     {
         "courseId": "0001601355",
         "route": "36系統",
-        "destination": "六角橋経由 横浜駅西口行",
+        "destination": "片倉町駅前経由 横浜駅西口行",
         "direction": "yokohama"
     },
     {
