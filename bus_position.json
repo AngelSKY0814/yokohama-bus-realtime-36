@@ -1,5 +1,42 @@
 {
-  "updated": "2026-10-31 18:47:02",
-  "count": 0,
-  "buses": []
+  "updated": "2026-10-31 21:58:12",
+  "count": 4,
+  "buses": [
+    {
+      "id": "3551",
+      "latitude": 35.467891,
+      "longitude": 139.621621,
+      "route": "36系統",
+      "destination": "菅田町経由 緑車庫前行",
+      "courseId": "0001600557",
+      "direction": "up"
+    },
+    {
+      "id": "1821",
+      "latitude": 35.5072325,
+      "longitude": 139.559885,
+      "route": "12系統",
+      "destination": "白山中央経由　西菅田団地行",
+      "courseId": "0001600290",
+      "direction": "nishisugeta"
+    },
+    {
+      "id": "3428",
+      "latitude": 35.503446,
+      "longitude": 139.5727205,
+      "route": "36系統",
+      "destination": "西菅田団地経由 横浜駅西口行",
+      "courseId": "0001600224",
+      "direction": "yokohama"
+    },
+    {
+      "id": "1330",
+      "latitude": 35.4740135,
+      "longitude": 139.6293225,
+      "route": "36系統",
+      "destination": "西菅田団地経由 横浜駅西口行",
+      "courseId": "0001600224",
+      "direction": "yokohama"
+    }
+  ]
 }
