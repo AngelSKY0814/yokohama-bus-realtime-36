@@ -524,7 +524,7 @@ async function start(){
   try{
     await loadRouteStops();
     await updateBus();
-    setInterval(updateBus,30000);
+    setInterval(updateBus,5000);
   }catch(error){
     console.error(error);
     document.getElementById("busCount").textContent="取得失敗";
