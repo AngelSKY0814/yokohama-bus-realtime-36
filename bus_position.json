@@ -1,15 +1,5 @@
 {
-  "updated": "2026-11-07 16:25:28",
-  "count": 1,
-  "buses": [
-    {
-      "id": "1340",
-      "latitude": 35.5075315,
-      "longitude": 139.558999,
-      "route": "36系統",
-      "destination": "西菅田団地経由 緑車庫前行",
-      "courseId": "0001600237",
-      "direction": "up"
-    }
-  ]
+  "updated": "2026-11-07 20:26:18",
+  "count": 0,
+  "buses": []
 }
