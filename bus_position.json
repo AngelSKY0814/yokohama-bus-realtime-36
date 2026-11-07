@@ -1,20 +1,11 @@
 {
-  "updated": "2026-11-07 03:09:05",
-  "count": 12,
+  "updated": "2026-11-07 10:07:00",
+  "count": 11,
   "buses": [
     {
-      "id": "1908",
-      "latitude": 35.476842,
-      "longitude": 139.6311455,
-      "route": "36系統",
-      "destination": "西菅田団地経由 緑車庫前行",
-      "courseId": "0001600237",
-      "direction": "up"
-    },
-    {
-      "id": "1994",
-      "latitude": 35.486765500000004,
-      "longitude": 139.6173335,
+      "id": "1669",
+      "latitude": 35.5001145,
+      "longitude": 139.5932045,
       "route": "36系統",
       "destination": "西菅田団地経由 緑車庫前行",
       "courseId": "0001600237",
@@ -22,87 +13,87 @@
     },
     {
       "id": "1866",
-      "latitude": 35.499721,
-      "longitude": 139.596408,
+      "latitude": 35.5075315,
+      "longitude": 139.558999,
       "route": "36系統",
       "destination": "西菅田団地経由 緑車庫前行",
       "courseId": "0001600237",
       "direction": "up"
     },
     {
-      "id": "1924",
-      "latitude": 35.502514500000004,
-      "longitude": 139.57678049999998,
+      "id": "1823",
+      "latitude": 35.4864525,
+      "longitude": 139.624528,
       "route": "36系統",
       "destination": "菅田町経由 緑車庫前行",
       "courseId": "0001600557",
       "direction": "up"
     },
     {
-      "id": "3551",
-      "latitude": 35.495073500000004,
-      "longitude": 139.6038345,
+      "id": "2726",
+      "latitude": 35.5091385,
+      "longitude": 139.561701,
+      "route": "12系統",
+      "destination": "西菅田団地行",
+      "courseId": "0001600429",
+      "direction": "nishisugeta"
+    },
+    {
+      "id": "1813",
+      "latitude": 35.476842,
+      "longitude": 139.6311455,
       "route": "82系統",
       "destination": "片倉町駅前経由 八反橋行",
       "courseId": "0001600577",
       "direction": "up"
     },
     {
-      "id": "3425",
-      "latitude": 35.486540000000005,
-      "longitude": 139.625115,
-      "route": "36系統",
-      "destination": "菅田町経由 横浜駅西口行",
-      "courseId": "0001600563",
-      "direction": "yokohama"
+      "id": "1814",
+      "latitude": 35.494699,
+      "longitude": 139.606123,
+      "route": "82系統",
+      "destination": "片倉町駅前経由 八反橋行",
+      "courseId": "0001600577",
+      "direction": "up"
     },
     {
-      "id": "1906",
-      "latitude": 35.509907,
-      "longitude": 139.5652675,
-      "route": "36系統",
-      "destination": "西菅田団地経由 横浜駅西口行",
-      "courseId": "0001600224",
-      "direction": "yokohama"
-    },
-    {
-      "id": "1925",
-      "latitude": 35.501275500000006,
-      "longitude": 139.5778955,
-      "route": "36系統",
-      "destination": "西菅田団地経由 横浜駅西口行",
-      "courseId": "0001600224",
+      "id": "1924",
+      "latitude": 35.487224,
+      "longitude": 139.6140135,
+      "route": "82系統",
+      "destination": "片倉町駅前経由 横浜駅西口行",
+      "courseId": "0001600012",
       "direction": "yokohama"
     },
     {
       "id": "1339",
-      "latitude": 35.4997165,
-      "longitude": 139.5966305,
+      "latitude": 35.494721,
+      "longitude": 139.6062865,
+      "route": "36系統",
+      "destination": "片倉町駅前経由 横浜駅西口行",
+      "courseId": "0001601355",
+      "direction": "yokohama"
+    },
+    {
+      "id": "1331",
+      "latitude": 35.499015,
+      "longitude": 139.57512400000002,
       "route": "36系統",
       "destination": "西菅田団地経由 横浜駅西口行",
       "courseId": "0001600224",
       "direction": "yokohama"
     },
     {
-      "id": "1948",
-      "latitude": 35.487828,
-      "longitude": 139.61057,
+      "id": "1811",
+      "latitude": 35.4837255,
+      "longitude": 139.62888149999998,
       "route": "36系統",
       "destination": "西菅田団地経由 横浜駅西口行",
       "courseId": "0001600224",
       "direction": "yokohama"
     },
     {
-      "id": "1907",
-      "latitude": 35.4766025,
-      "longitude": 139.6315815,
-      "route": "36系統",
-      "destination": "西菅田団地経由 横浜駅西口行",
-      "courseId": "0001600224",
-      "direction": "yokohama"
-    },
-    {
-      "id": "1306",
+      "id": "2674",
       "latitude": 35.509285500000004,
       "longitude": 139.567686,
       "route": "12系統",
