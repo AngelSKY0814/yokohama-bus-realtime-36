@@ -1,5 +1,24 @@
 {
-  "updated": "2026-11-08 16:49:30",
-  "count": 0,
-  "buses": []
+  "updated": "2026-11-08 20:50:18",
+  "count": 2,
+  "buses": [
+    {
+      "id": "2672",
+      "latitude": 35.5087855,
+      "longitude": 139.56788999999998,
+      "route": "12系統",
+      "destination": "西菅田団地行",
+      "courseId": "0001600429",
+      "direction": "nishisugeta"
+    },
+    {
+      "id": "1925",
+      "latitude": 35.502596,
+      "longitude": 139.57688050000002,
+      "route": "36系統",
+      "destination": "菅田町経由 横浜駅西口行",
+      "courseId": "0001600563",
+      "direction": "yokohama"
+    }
+  ]
 }
