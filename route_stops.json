@@ -4,7 +4,7 @@
     {
       "courseId": "0001600012",
       "route": "82系統",
-      "destination": "六角橋経由 横浜駅西口行",
+      "destination": "片倉町駅前経由 横浜駅西口行",
       "direction": "yokohama",
       "stopCount": 22,
       "stops": [
@@ -123,7 +123,7 @@
     {
       "courseId": "0001600145",
       "route": "82系統",
-      "destination": "六角橋経由 東神奈川駅西口行",
+      "destination": "片倉町駅前経由 東神奈川駅西口行",
       "direction": "higashikanagawa",
       "stopCount": 16,
       "stops": [
@@ -1415,7 +1415,7 @@
           {
       "courseId": "0001601391",
       "route": "295系統",
-      "destination": "新横浜駅前行",
+      "destination": "ケアプラザ入口経由 新横浜駅前行",
       "direction": "shinyokohama",
       "stopCount": 12,
       "stops": [
@@ -2802,7 +2802,7 @@
     {
       "courseId": "0001600577",
       "route": "82系統",
-      "destination": "六角橋経由 八反橋行",
+      "destination": "片倉町駅前経由 八反橋行",
       "direction": "up",
       "stopCount": 21,
       "stops": [
@@ -2916,7 +2916,7 @@
     {
       "courseId": "0001600251",
       "route": "82系統",
-      "destination": "六角橋経由 八反橋行",
+      "destination": "片倉町駅前経由 八反橋行",
       "direction": "up",
       "stopCount": 16,
       "stops": [
@@ -3237,7 +3237,7 @@
       {
       "courseId": "0001601392",
       "route": "295系統",
-      "destination": "西菅田団地行",
+      "destination": "ケアプラザ入口経由 西菅田団地行",
       "direction": "up",
       "stopCount": 12,
       "stops": [
