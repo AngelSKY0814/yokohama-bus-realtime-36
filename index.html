@@ -324,7 +324,62 @@ function buildScreenRoute(route){
     top:tops[i]
   }));
 }
+/* ---------------------------------------
+   西菅田団地～ケアプラザ入口の区間を探す
+---------------------------------------- */
+function findCommonSection(stops){
 
+  const candidates=[];
+
+  const landmarks=[
+    "ひまわり団地前",
+    "小川橋",
+    "道路碑前",
+    "熊の堂",
+    "菅田町入口"
+  ];
+
+  for(let i=0;i<stops.length;i++){
+
+    if(stops[i].name!=="西菅田団地") continue;
+
+    for(let j=0;j<stops.length;j++){
+
+      if(stops[j].name!=="ケアプラザ入口") continue;
+      if(i===j) continue;
+
+      const start=Math.min(i,j);
+      const end=Math.max(i,j);
+
+      const length=
+        stops[end].cumulativeDistance-
+        stops[start].cumulativeDistance;
+
+      if(length<500 || length>8000) continue;
+
+      const sectionStops=stops.slice(start,end+1);
+
+      const landmarkCount=sectionStops.filter(stop=>
+        landmarks.includes(stop.name)
+      ).length;
+
+      if(landmarkCount<2) continue;
+
+      candidates.push({
+        start,
+        end,
+        length
+      });
+    }
+  }
+
+  if(candidates.length===0) return null;
+
+  candidates.sort((a,b)=>a.length-b.length);
+
+  return candidates[0];
+}
+  
 /* ---------------------------------------
    バスGPSを路線の線分上へ投影
 ---------------------------------------- */
