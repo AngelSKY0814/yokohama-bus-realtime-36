@@ -1412,12 +1412,12 @@
         }
       ]
     },
-          {
+         {
       "courseId": "0001601391",
       "route": "295系統",
       "destination": "ケアプラザ入口経由 新横浜駅前行",
       "direction": "shinyokohama",
-      "stopCount": 12,
+      "stopCount": 15,
       "stops": [
         {
           "name": "西菅田団地",
@@ -1478,9 +1478,24 @@
           "name": "ケアプラザ入口",
           "latitude": 35.495047,
           "longitude": 139.605101
+        },
+        {
+          "name": "山王森公園前",
+          "latitude": 35.497617,
+          "longitude": 139.607398
+        },
+        {
+          "name": "又口橋",
+          "latitude": 35.501314,
+          "longitude": 139.607948
+        },
+        {
+          "name": "新横浜駅前",
+          "latitude": 35.508244,
+          "longitude": 139.617319
         }
       ]
-    },
+     },
 
     {
             "courseId": "0001600340",
