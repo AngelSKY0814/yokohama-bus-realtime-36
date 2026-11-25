@@ -16,27 +16,9 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
 .bus{position:absolute;width:155px;min-height:58px;background:#0066cc;color:#fff;border-radius:12px;padding:6px 9px;font-size:15px;font-weight:bold;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.30);transition:top .8s ease,left .8s ease;z-index:100}
 .bus-left{left:145px}.bus-right{left:380px}
 .bus-id{font-size:14px}.bus-route{font-size:14px;margin-top:2px}.bus-destination{font-size:12px;margin-top:3px;line-height:16px}
-  /* 重なったバスをまとめるボタン */
-.bus-cluster {
-  position: absolute;
-  width: 64px;
-  height: 52px;
-  background: #e65a00;
-  color: white;
-  border: 3px solid white;
-  border-radius: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
-  z-index: 200;
-  box-shadow: 0 3px 8px rgba(0,0,0,.3);
-}
-
-.bus {
-  cursor: pointer;
-}
-  
+/* 重なったバスをまとめるボタン */
+.bus-cluster{position:absolute;width:64px;height:52px;background:#e65a00;color:#fff;border:3px solid #fff;border-radius:14px;font-size:18px;font-weight:bold;text-align:center;cursor:pointer;z-index:200;box-shadow:0 3px 8px rgba(0,0,0,.3);transform:translateY(-50%)}
+.bus{cursor:pointer}
 .info-panel{position:fixed;top:15px;right:15px;width:330px;max-height:calc(100vh - 30px);overflow:auto;background:#fff;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.25);padding:15px;z-index:1000}
 .info-title{font-size:24px;color:#0066cc;font-weight:bold;margin-bottom:12px}.info-label{color:#666;font-size:14px}.info-value{font-size:20px;font-weight:bold;margin-bottom:10px}.update{color:#008000}
 .bus-list{max-height:330px;overflow-y:auto;margin-top:10px}.bus-item{border-top:1px solid #ddd;padding:8px 0;font-size:14px}.bus-item strong{color:#0066cc}
@@ -77,7 +59,7 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
   /* 上部情報パネルも画面内に収める */
   .info-panel{
     position:fixed;
-    top:-200px;//バス取得した情報
+    top:-200px; /* バス取得した情報 */
     left:8px;
     right:8px;
     width:auto;
@@ -214,17 +196,18 @@ for(const name of stationNames){
 }
 
 let routeStopsData={};
-
 const busElements={};
 
-// バスの表示位置を保存
+// バスの通常位置と、重なり表示用の情報
 const busPositionData={};
-
-// 重なったバスのまとめボタン
 const busClusterElements={};
-
-// 展開中のグループ
 const expandedBusGroups=new Set();
+  // 非表示にする境界の停留所
+const hideStop = {
+  name: "山王森公園前",
+  latitude: 35.497617,
+  longitude: 139.607398
+};
 
 // GPS間の距離をメートルで計算
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -516,7 +499,6 @@ function getAccurateBusTop(bus){
 ---------------------------------------- */
 function createBus(bus){
   const div=document.createElement("div");
-
   div.className="bus bus-right";
   div.id="bus-"+String(bus.id);
 
@@ -525,10 +507,9 @@ function createBus(bus){
     "<div class='bus-route'></div>"+
     "<div class='bus-destination'></div>";
 
-  // 展開したバスをクリックすると元に戻す
+  // 展開中のバスを押すと、まとめた状態に戻す
   div.addEventListener("click",()=>{
     const key=div.dataset.clusterKey;
-
     if(key && expandedBusGroups.has(key)){
       expandedBusGroups.delete(key);
       updateBusClusters();
@@ -536,10 +517,171 @@ function createBus(bus){
   });
 
   document.body.appendChild(div);
-
   busElements[String(bus.id)]=div;
-
   return div;
+}
+
+function updateBusPosition(bus){
+  const id=String(bus.id);
+  let element=busElements[id];
+
+  if(!element) element=createBus(bus);
+
+  const top=getAccurateBusTop(bus);
+
+  if(top===null){
+    element.style.display="none";
+    delete busPositionData[id];
+    return;
+  }
+
+  let side;
+  if(String(bus.direction)==="up"){
+    element.classList.remove("bus-right");
+    element.classList.add("bus-left");
+    side="left";
+  }else{
+    element.classList.remove("bus-left");
+    element.classList.add("bus-right");
+    side="right";
+  }
+
+  // GPSから計算した通常の表示位置を保存
+  busPositionData[id]={top:top,side:side};
+  element.style.display="block";
+  element.style.top=top+"px";
+
+  element.querySelector(".bus-route").textContent=bus.route||"";
+  element.querySelector(".bus-destination").textContent=bus.destination||"";
+}
+
+/* ---------------------------------------
+   重なったバスをまとめて表示する
+   同じ側で画面上の位置が60px以内なら同じグループ
+---------------------------------------- */
+function updateBusClusters(){
+  const entries=Object.entries(busPositionData).map(([id,data])=>({
+    id:id,
+    top:data.top,
+    side:data.side
+  }));
+
+  const groups=[];
+
+  for(const side of ["left","right"]){
+    const list=entries
+      .filter(item=>item.side===side)
+      .sort((a,b)=>a.top-b.top);
+
+    let group=[];
+
+    for(const item of list){
+      if(group.length===0 || item.top-group[0].top<=60){
+        group.push(item);
+      }else{
+        if(group.length>=2) groups.push(group);
+        group=[item];
+      }
+    }
+
+    if(group.length>=2) groups.push(group);
+  }
+
+  const activeKeys=new Set();
+  const groupedIds=new Set();
+
+  for(const group of groups){
+    const ids=group.map(item=>item.id).sort();
+    const key=group[0].side+":"+ids.join("_");
+    activeKeys.add(key);
+
+    group.forEach(item=>groupedIds.add(item.id));
+
+    const averageTop=group.reduce((sum,item)=>sum+item.top,0)/group.length;
+    const firstElement=busElements[group[0].id];
+    if(!firstElement) continue;
+
+    if(!busClusterElements[key]){
+      const button=document.createElement("button");
+      button.className="bus-cluster";
+      button.type="button";
+      button.setAttribute("aria-label",group.length+"台のバスを表示");
+
+      button.addEventListener("click",()=>{
+        if(expandedBusGroups.has(key)){
+          expandedBusGroups.delete(key);
+        }else{
+          expandedBusGroups.add(key);
+        }
+        updateBusClusters();
+      });
+
+      document.body.appendChild(button);
+      busClusterElements[key]=button;
+    }
+
+    const cluster=busClusterElements[key];
+    cluster.textContent=group.length+"台";
+    cluster.style.top=averageTop+"px";
+    cluster.style.left=(firstElement.offsetLeft+(firstElement.offsetWidth-64)/2)+"px";
+
+    if(expandedBusGroups.has(key)){
+      cluster.style.display="none";
+
+      group.forEach((item,index)=>{
+        const element=busElements[item.id];
+        if(!element) return;
+
+        const offset=(index-(group.length-1)/2)*68;
+        element.style.display="block";
+        element.style.top=(averageTop+offset)+"px";
+        element.dataset.clusterKey=key;
+      });
+    }else{
+      cluster.style.display="block";
+
+      group.forEach(item=>{
+        const element=busElements[item.id];
+        if(!element) return;
+
+        element.style.display="none";
+        element.dataset.clusterKey=key;
+      });
+    }
+  }
+
+  // グループに入っていないバスは通常の位置に表示
+  for(const item of entries){
+    if(!groupedIds.has(item.id)){
+      const element=busElements[item.id];
+      if(!element) continue;
+
+      element.style.display="block";
+      element.style.top=item.top+"px";
+      delete element.dataset.clusterKey;
+    }
+  }
+
+  // 今回の更新で不要になったまとめボタンを削除
+  for(const key of Object.keys(busClusterElements)){
+    if(!activeKeys.has(key)){
+      busClusterElements[key].remove();
+      delete busClusterElements[key];
+      expandedBusGroups.delete(key);
+    }
+  }
+}
+
+function removeOldBuses(buses){
+  const ids=new Set(buses.map(b=>String(b.id)));
+
+  for(const id in busElements){
+    if(!ids.has(id)){
+      busElements[id].remove();
+      delete busElements[id];
+      delete busPositionData[id];
+    }
+  }
 }
 
 /* ---------------------------------------
@@ -568,6 +710,9 @@ async function updateBus(){
     for(const bus of buses){
       updateBusPosition(bus);
     }
+
+    // 重なったバスをまとめる／展開状態を反映
+    updateBusClusters();
 
     const list=document.getElementById("busList");
     list.innerHTML="";
