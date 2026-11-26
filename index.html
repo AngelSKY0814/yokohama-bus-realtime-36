@@ -75,6 +75,25 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
   .status{font-size:10px;}
 }
 
+
+/* バス詳細パネル */
+.bus-detail-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;align-items:center;justify-content:center;padding:14px}
+.bus-detail-backdrop.open{display:flex}
+.bus-detail{width:min(620px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.3);padding:18px;color:#183047}
+.bus-detail-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:2px solid #e5edf4;padding-bottom:12px;margin-bottom:12px}
+.bus-detail-title{font-size:21px;font-weight:bold;color:#0066cc}
+.bus-detail-close{border:0;background:#eee;border-radius:8px;padding:8px 12px;font-size:16px;cursor:pointer}
+.bus-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.bus-detail-card{background:#f2f6fa;border-radius:10px;padding:12px}
+.bus-detail-label{font-size:12px;color:#667788}
+.bus-detail-value{font-size:20px;font-weight:bold;margin-top:4px}
+.bus-detail-delay{font-size:24px;font-weight:bold;color:#d33}
+.bus-detail-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+.bus-detail-table th,.bus-detail-table td{padding:9px 6px;border-bottom:1px solid #e5e5e5;text-align:left}
+.bus-detail-table th{background:#f2f6fa}
+.bus-detail-note{font-size:12px;color:#667788;line-height:1.6;margin-top:12px}
+@media(max-width:700px){.bus-detail{padding:13px}.bus-detail-title{font-size:18px}.bus-detail-value{font-size:17px}.bus-detail-table{font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -88,6 +107,14 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
   <div class="info-value update" id="updateTime">--:--:--</div>
   <div class="status" id="routeStatus">路線情報を読み込んでいます...</div>
   <div class="bus-list" id="busList">取得中...</div>
+</div>
+
+
+<div class="bus-detail-backdrop" id="busDetailBackdrop" onclick="if(event.target===this) closeBusDetail()">
+  <section class="bus-detail" role="dialog" aria-modal="true" aria-labelledby="busDetailTitle">
+    <div class="bus-detail-head"><div class="bus-detail-title" id="busDetailTitle">バスの運行情報</div><button class="bus-detail-close" onclick="closeBusDetail()">閉じる</button></div>
+    <div id="busDetailContent">バス情報を読み込んでいます...</div>
+  </section>
 </div>
 
 <script>
@@ -200,6 +227,9 @@ const busElements={};
 
 // バスの通常位置と、重なり表示用の情報
 const busPositionData={};
+// GPSの前回位置を保存し、移動速度の推定に使用
+const busGpsHistory={};
+let timetableData=null;
 const busClusterElements={};
 const expandedBusGroups=new Set();
   // 非表示にする境界の停留所
@@ -514,6 +544,7 @@ function createBus(bus){
       expandedBusGroups.delete(key);
       updateBusClusters();
     }
+    openBusDetail(bus);
   });
 
   document.body.appendChild(div);
@@ -528,6 +559,16 @@ function updateBusPosition(bus){
   if(!element) element=createBus(bus);
 
   const top=getAccurateBusTop(bus);
+  const route=routeStopsData[String(bus.courseId)];
+  const projected=route?projectBus(bus,route):null;
+  if(projected){
+    const previous=busGpsHistory[id];
+    busGpsHistory[id]={
+      distance:projected.routeDistance,time:Date.now(),
+      previousDistance:previous?previous.distance:undefined,
+      previousTime:previous?previous.time:undefined
+    };
+  }
 
   if(top===null){
     element.style.display="none";
@@ -672,6 +713,51 @@ function updateBusClusters(){
   }
 }
 
+// バス詳細画面を表示
+function openBusDetail(bus){
+  const route=routeStopsData[String(bus.courseId)];
+  const projected=route?projectBus(bus,route):null;
+  const content=document.getElementById("busDetailContent");
+  const backdrop=document.getElementById("busDetailBackdrop");
+  if(!route||!projected){
+    content.textContent="このバスの停留所情報を取得できません。";
+    backdrop.classList.add("open"); return;
+  }
+  const stops=projected.stops;
+  const nextIndex=Math.min(projected.segmentIndex+1,stops.length-1);
+  const nextStop=stops[nextIndex];
+  const currentHistory=busGpsHistory[String(bus.id)];
+  let speed=0;
+  if(currentHistory && currentHistory.previousDistance!==undefined){
+    const seconds=(currentHistory.time-currentHistory.previousTime)/1000;
+    if(seconds>0) speed=(currentHistory.distance-currentHistory.previousDistance)/seconds;
+  }
+  // 直近のGPS差分から速度を推定。初回や停止中は到着予測を出さない。
+  const remaining=Math.max(0,nextStop.cumulativeDistance-projected.routeDistance);
+  const etaMinutes=speed>0.8?Math.max(1,Math.ceil(remaining/(speed*60))):null;
+  const eta=etaMinutes===null?"計算中":new Date(Date.now()+etaMinutes*60000).toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
+  const direction=String(bus.direction)==="up"?"上り方向":"下り方向";
+  const timetableNote=timetableData?"時刻表データを読み込みました。":"時刻表との比較は、全便の時刻データを timetable.json に用意した後に有効になります。";
+  content.innerHTML=`
+    <div><b>${escapeHtml(bus.route||"36系統")}</b> ${escapeHtml(bus.destination||"")}</div>
+    <div class="bus-detail-grid">
+      <div class="bus-detail-card"><div class="bus-detail-label">車両番号</div><div class="bus-detail-value">${escapeHtml(String(bus.id))}</div></div>
+      <div class="bus-detail-card"><div class="bus-detail-label">進行方向</div><div class="bus-detail-value">${direction}</div></div>
+      <div class="bus-detail-card"><div class="bus-detail-label">次のバス停</div><div class="bus-detail-value">${escapeHtml(nextStop.name)}</div></div>
+      <div class="bus-detail-card"><div class="bus-detail-label">到着見込み（GPS推定）</div><div class="bus-detail-value">${eta}</div></div>
+    </div>
+    <div class="bus-detail-card"><div class="bus-detail-label">遅延時間</div><div class="bus-detail-value">時刻表データの準備待ち</div></div>
+    <table class="bus-detail-table"><thead><tr><th>項目</th><th>情報</th></tr></thead><tbody>
+      <tr><td>現在の緯度</td><td>${escapeHtml(String(bus.latitude??"--"))}</td></tr>
+      <tr><td>現在の経度</td><td>${escapeHtml(String(bus.longitude??"--"))}</td></tr>
+      <tr><td>次の停留所まで</td><td>${Math.round(remaining)} m</td></tr>
+    </tbody></table>
+    <p class="bus-detail-note">${timetableNote}<br>到着見込みはGPS更新間隔と位置の差から推定します。GPSデータが少ない場合は「計算中」と表示します。道路状況や信号待ちにより実際の到着時刻とは異なる場合があります。</p>`;
+  backdrop.classList.add("open");
+}
+function closeBusDetail(){document.getElementById("busDetailBackdrop").classList.remove("open");}
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
 function removeOldBuses(buses){
   const ids=new Set(buses.map(b=>String(b.id)));
 
@@ -680,6 +766,7 @@ function removeOldBuses(buses){
       busElements[id].remove();
       delete busElements[id];
       delete busPositionData[id];
+      delete busGpsHistory[id];
     }
   }
 }
