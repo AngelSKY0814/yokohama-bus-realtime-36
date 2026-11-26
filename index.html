@@ -727,6 +727,7 @@ async function loadTimetable(){
   }catch(error){
     timetableData=null;
     console.warn("時刻表データ:",error.message);
+    document.getElementById("routeStatus").textContent="路線情報は読み込みました。timetable.json は未設置です。";
   }
 }
 function timeToMinutes(value){
@@ -767,10 +768,6 @@ function openBusDetail(bus){
   selectedBusForDetail=bus;
   renderBusDetail();
 }
-function changeTimetableDayType(value){
-  timetableDayType=value;
-  if(selectedBusForDetail) renderBusDetail();
-}
 function renderBusDetail(){
   const bus=selectedBusForDetail;
   if(!bus) return;
@@ -810,7 +807,7 @@ function renderBusDetail(){
       if(delay< -720) delay+=1440;
     }
     delayText=formatMinuteDifference(delay);
-    rows=stops.slice(firstIndex,Math.min(firstIndex+6,stops.length)).map(stop=>{
+    rows=stops.slice(firstIndex).map(stop=>{
       const scheduled=trip.stops.find(item=>item.name===stop.name);
       const remaining=Math.max(0,stop.cumulativeDistance-projected.routeDistance);
       const etaMinutes=speed>0.8?Math.max(0,Math.ceil(remaining/(speed*60))):null;
@@ -818,14 +815,14 @@ function renderBusDetail(){
       return `<tr><td>${escapeHtml(stop.name)}</td><td>${scheduled?escapeHtml(scheduled.time):"—"}</td><td>${etaTime}</td></tr>`;
     }).join("");
   }else{
-    rows=stops.slice(firstIndex,Math.min(firstIndex+6,stops.length)).map(stop=>
+    rows=stops.slice(firstIndex).map(stop=>
       `<tr><td>${escapeHtml(stop.name)}</td><td>—</td><td>計算中</td></tr>`
     ).join("");
   }
   const dayLabel={weekday:"平日",saturday:"土曜",holiday:"日曜・祝日"}[timetableDayType];
   const timetableStatus=trip
     ?"時刻表データを使用中（"+dayLabel+"）"
-    :"該当便の時刻表が見つかりません。timetable.json の便データを確認してください。";
+    :"時刻表データが未設置、またはこの便に一致するデータがありません。";
   content.innerHTML=`
     <div><b>${escapeHtml(bus.route||"36系統")}</b> ${escapeHtml(bus.destination||"")}</div>
     <div class="bus-detail-grid">
@@ -835,16 +832,9 @@ function renderBusDetail(){
       <div class="bus-detail-card"><div class="bus-detail-label">到着予測（GPS）</div><div class="bus-detail-value">${firstEtaDate?formatClock(firstEtaDate):"GPS速度を計算中"}</div></div>
     </div>
     <div class="bus-detail-card"><div class="bus-detail-label">遅延・早着</div><div class="bus-detail-delay">${escapeHtml(delayText)}</div></div>
-    <div style="margin-top:12px">
-      <label for="timetableDayType" style="font-size:13px;font-weight:bold">時刻表の曜日：</label>
-      <select id="timetableDayType" onchange="changeTimetableDayType(this.value)" style="padding:7px;border:1px solid #bbb;border-radius:6px">
-        <option value="weekday" ${timetableDayType==="weekday"?"selected":""}>平日</option>
-        <option value="saturday" ${timetableDayType==="saturday"?"selected":""}>土曜</option>
-        <option value="holiday" ${timetableDayType==="holiday"?"selected":""}>日曜・祝日</option>
-      </select>
-    </div>
+    <div class="bus-detail-note">時刻表区分：${dayLabel}（現在の日付から自動判定）</div>
     <table class="bus-detail-table"><thead><tr><th>停留所</th><th>時刻表</th><th>到着予測</th></tr></thead><tbody>${rows}</tbody></table>
-    <p class="bus-detail-note">${escapeHtml(timetableStatus)}<br>到着予測は直近のGPS位置の変化から算出する概算です。速度が取得できない場合は「計算中」と表示します。信号待ち・渋滞などにより実際の到着時刻と異なる場合があります。</p>`;
+    <p class="bus-detail-note">${escapeHtml(timetableStatus)}<br>停留所は次の停留所から終点まで表示します。到着予測は直近のGPS位置の変化から算出する概算です。速度が取得できない場合は「計算中」と表示します。信号待ち・渋滞などにより実際の到着時刻と異なる場合があります。</p>`;
   backdrop.classList.add("open");
 }
 function closeBusDetail(){document.getElementById("busDetailBackdrop").classList.remove("open");}
@@ -878,7 +868,9 @@ async function updateBus(){
     }
 
     const data=await response.json();
-    const buses=Array.isArray(data.buses)?data.buses:[];
+    const allBuses=Array.isArray(data.buses)?data.buses:[];
+    // このページは36系統専用。Workerが複数系統を返す場合に備えて絞り込む。
+    const buses=allBuses.filter(bus=>String(bus.route||"").includes("36系統"));
 
     document.getElementById("busCount").textContent=buses.length;
     document.getElementById("updateTime").textContent=
@@ -918,6 +910,12 @@ async function updateBus(){
         "<br>経度: "+bus.longitude;
 
       list.appendChild(item);
+    }
+
+    // 詳細画面を開いている場合は、最新GPSで到着予測を更新する
+    if(selectedBusForDetail && document.getElementById("busDetailBackdrop").classList.contains("open")){
+      const latest=buses.find(bus=>String(bus.id)===String(selectedBusForDetail.id));
+      if(latest){ selectedBusForDetail=latest; renderBusDetail(); }
     }
 
   }catch(error){
