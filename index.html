@@ -867,15 +867,10 @@ async function updateBus(){
   "https://late-morning-6465.angelsky-sora-mm-0814.workers.dev/",
   {cache:"no-store"}
 );
+const data=await response.json();
+const allBuses=Array.isArray(data.buses)?data.buses:[];
 
-    if(!response.ok){
-      throw new Error("bus_position.json を読み込めません");
-    }
-
-    const data=await response.json();
-    const allBuses=Array.isArray(data.buses)?data.buses:[];
-    // 全車両を消してしまわないよう一覧を残し、状態欄に注意を表示する。
-   // 36系統と82系統のバスを表示対象にする
+// 36系統と82系統のバスを表示対象にする
 const buses = allBuses.filter(bus => {
     const route = String(bus.route || "");
 
@@ -883,10 +878,13 @@ const buses = allBuses.filter(bus => {
            route.includes("82系統");
 });
 
-    document.getElementById("busCount").textContent=buses.length;
-    document.getElementById("updateTime").textContent=
-      data.updated||new Date().toLocaleTimeString("ja-JP");
-    if(filterFallback){
+document.getElementById("busCount").textContent=buses.length;
+document.getElementById("updateTime").textContent=
+    data.updated||new Date().toLocaleTimeString("ja-JP");
+
+const filterFallback = false;
+
+if(filterFallback){
       document.getElementById("routeStatus").textContent="Workerから36系統の表記を確認できません。全車両を一時表示しています。";
     }else if(!routeStopsData || Object.keys(routeStopsData).length===0){
       document.getElementById("routeStatus").textContent="バス情報は取得しましたが、停留所情報を再読み込み中です。";
