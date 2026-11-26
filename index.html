@@ -874,11 +874,14 @@ async function updateBus(){
 
     const data=await response.json();
     const allBuses=Array.isArray(data.buses)?data.buses:[];
-    // まず36系統で絞り込む。Worker側のroute表記が異なる場合は、
     // 全車両を消してしまわないよう一覧を残し、状態欄に注意を表示する。
-    const route36=allBuses.filter(bus=>String(bus.route||"").includes("36系統"));
-    const filterFallback=(allBuses.length>0 && route36.length===0);
-    const buses=filterFallback?allBuses:route36;
+   // 36系統と82系統のバスを表示対象にする
+const buses = allBuses.filter(bus => {
+    const route = String(bus.route || "");
+
+    return route.includes("36系統") ||
+           route.includes("82系統");
+});
 
     document.getElementById("busCount").textContent=buses.length;
     document.getElementById("updateTime").textContent=
