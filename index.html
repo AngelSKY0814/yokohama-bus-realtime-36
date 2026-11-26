@@ -869,7 +869,20 @@ async function updateBus(){
 );
 const data=await response.json();
 const allBuses=Array.isArray(data.buses)?data.buses:[];
+console.log("Workerから取得した全バス:", allBuses);
 
+console.log(
+    "取得した系統一覧:",
+    [...new Set(allBuses.map(bus => bus.route))]
+);
+
+console.log(
+    "82系統のバス:",
+    allBuses.filter(bus =>
+        String(bus.route || "").includes("82")
+    )
+);
+    
 // 36系統と82系統のバスを表示対象にする
 const buses = allBuses.filter(bus => {
     const route = String(bus.route || "");
