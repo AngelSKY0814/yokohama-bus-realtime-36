@@ -268,25 +268,20 @@ courses = [
     "courseId": "0001600326",
     "route": "82系統",
     "destination": "六角橋経由 横浜駅西口行",
-    "direction": "up"
+    "direction": "yokoham"
 },
 {
     "courseId": "0001600545",
     "route": "82系統",
     "destination": "六角橋経由 東神奈川駅西口行",
-    "direction": "up"
+    "direction": "higasshikanagawa"
 },
 {
     "courseId": "0001601375",
     "route": "88系統",
     "destination": "東神奈川駅西口経由 市民病院行",
-    "direction": "up"
-},
-
-
-
-
-
+    "direction": "cityhospital"
+}
 ]
 
 headers = {
