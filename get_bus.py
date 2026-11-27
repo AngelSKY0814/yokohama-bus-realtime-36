@@ -246,6 +246,42 @@ courses = [
         "destination": "中山駅前行",
         "direction":"up"
     },
+{
+    "courseId": "0001600216",
+    "route": "82系統",
+    "destination": "六角橋経由 神大寺入口行",
+    "direction": "up"
+},
+{
+    "courseId": "0001600475",
+    "route": "82系統",
+    "destination": "六角橋経由 神大寺入口行",
+    "direction": "up"
+},
+{
+    "courseId": "0001601374",
+    "route": "88系統",
+    "destination": "東神奈川駅西口経由 神大寺入口行",
+    "direction": "up"
+},
+{
+    "courseId": "0001600326",
+    "route": "82系統",
+    "destination": "六角橋経由 横浜駅西口行",
+    "direction": "up"
+},
+{
+    "courseId": "0001600545",
+    "route": "82系統",
+    "destination": "六角橋経由 東神奈川駅西口行",
+    "direction": "up"
+},
+{
+    "courseId": "0001601375",
+    "route": "88系統",
+    "destination": "東神奈川駅西口経由 市民病院行",
+    "direction": "up"
+},
 
 
 
