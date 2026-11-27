@@ -281,7 +281,7 @@ courses = [
     "route": "88系統",
     "destination": "東神奈川駅西口経由 市民病院行",
     "direction": "cityhospital"
-}
+},
 ]
 
 headers = {
