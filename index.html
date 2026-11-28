@@ -986,11 +986,19 @@ async function updateBus(){
   if(busUpdateRunning) return;
   busUpdateRunning=true;
   try{
-   const response=await fetch(
+ const response = await fetch(
   "https://late-morning-6465.angelsky-sora-mm-0814.workers.dev/",
-  {cache:"no-store"}
+  {
+    method: "GET",
+    cache: "no-store"
+  }
 );
-const data=await response.json();
+
+if (!response.ok) {
+  throw new Error("Worker取得失敗: HTTP " + response.status);
+}
+
+const data = await response.json();
 const allBuses=Array.isArray(data.buses)?data.buses:[];
 console.log("Workerから取得した全バス:", allBuses);
 
