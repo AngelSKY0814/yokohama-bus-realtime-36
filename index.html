@@ -25,72 +25,45 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
 .status{font-size:13px;color:#666;margin-top:5px}
 
 
-/* 82系統の分岐線・ジャンプボタン */
-
 /* 82系統・八反橋方面の分岐線とジャンプボタン */
-.route-branch {
-  position: absolute;
-  top: 3838px;
-  left: 0;
-  width: 330px;
-  height: 100px;
-  z-index: 1;
-  pointer-events: none;
+.route-branch{
+  position:absolute;
+  top:3838px;
+  left:0;
+  width:330px;
+  height:100px;
+  z-index:1;
+  pointer-events:none;
 }
-
-
-<!-- 82系統のオレンジ色の分岐線 -->
-<svg class="route-branch"
-     viewBox="0 0 330 100"
-     preserveAspectRatio="none"
-     aria-hidden="true">
-
-  <path d="M 0 0 H 270 C 305 0 330 25 330 62" />
-
-</svg>
-
+.route-branch path{
+  fill:none;
+  stroke:#ffb900;
+  stroke-width:5;
+  stroke-linecap:butt;
+  stroke-linejoin:round;
 }
-
-/* 82系統の移動ボタン */
-.route-jump {
-  position: absolute;
-  top: 3774px;
-  left: 4px;
-  z-index: 10;
-  min-height: 44px;
-  border: none;
-  border-radius: 0;
-  background: #fff;
-  color: #f0a500;
-  padding: 10px 14px;
-  font-size: 20px;
-  font-weight: 400;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
+.route-jump{
+  position:absolute;
+  top:3774px;
+  left:4px;
+  z-index:10;
+  min-height:44px;
+  border:0;
+  border-radius:0;
+  background:#fff;
+  color:#f0a500;
+  padding:10px 14px;
+  font-size:20px;
+  font-weight:400;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:none;
 }
-
-.route-jump:hover {
-  background: #fff;
-}
-
-/* 停留所より手前に線を表示 */
-.station,
-.station-name {
-  z-index: 2;
-}
-
-@media (max-width: 700px) {
-  .route-branch {
-    width: 50vw;
-    height: 100px;
-  }
-
-  .route-jump {
-    left: 2vw;
-    font-size: 16px;
-    padding: 8px 10px;
-  }
+.route-jump:hover{background:#fff}
+.station,.station-name{z-index:2}
+@media(max-width:700px){
+  .route-branch{width:50vw;height:100px}
+  .route-jump{left:2vw;font-size:16px;padding:8px 10px}
 }
 
 /* スマホ向けレイアウト */
@@ -167,12 +140,12 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
 </head>
 <body>
 <div class="line" aria-hidden="true"></div>
-<svg class="route-branch" viewBox="0 0 330 260" preserveAspectRatio="none" aria-hidden="true">
-  <path d="M 0 130 L 330 130" />
+<svg class="route-branch" viewBox="0 0 330 100" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M 0 0 H 270 C 305 0 330 25 330 62" />
 </svg>
 <button class="route-jump" type="button"
   onclick="jumpToStation('熊の堂')"
-  aria-label="82系統の分岐付近へ移動">82系統</button>
+  aria-label="82系統・八反橋方面の分岐付近へ移動">←82系統 八反橋方面</button>
 <div class="info-panel">
   <div class="info-title">36系統</div>
   <div class="info-label"></div>
