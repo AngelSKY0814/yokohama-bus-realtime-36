@@ -1016,15 +1016,22 @@ console.log(
     
 // 36系統と82系統のバスを表示対象にする
 const buses = allBuses.filter(bus => {
-    const route = String(bus.route || "");
+    const route = String(bus.route || "").trim();
 
-    return route.includes("36系統") ||
-           route.includes("82系統") ||
-           route.includes("88系統") ||
-      　   route.includes("295系統") ||
-           route.includes("326系統");
+    return [
+        "36系統",
+        "82系統",
+        "88系統",
+        "295系統",
+        "326系統"
+    ].includes(route);
 });
 
+console.log("表示対象バス:", buses);
+console.log(
+    "表示対象の系統一覧:",
+    [...new Set(buses.map(bus => bus.route))]
+);
 document.getElementById("updateTime").textContent=
     data.updated||new Date().toLocaleTimeString("ja-JP");
 
