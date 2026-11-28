@@ -599,11 +599,21 @@ function shouldDisplayBus(bus, projected){
     }
   }
 
-  // 菅田町経由・緑車庫方面：菅田町の手前から表示
-  if(destination.includes("菅田町") && destination.includes("緑車庫")){
-    if(isBeforeDisplayPoint(projected,"菅田町")){
-      return false;
-    }
+if(
+  String(bus.destination || "").includes("菅田町") &&
+  String(bus.destination || "").includes("緑車庫")
+){
+  console.log("菅田町経由・緑車庫方面の確認", {
+    id: bus.id,
+    route: bus.route,
+    destination: bus.destination,
+    courseId: bus.courseId,
+    routeDataExists: !!route,
+    stopCount: route?.stops?.length,
+    projectedExists: !!projected,
+    stopNames: route?.stops?.map(stop => stop.name)
+  });
+}
   }
 
   // 菅田町経由・横浜方面：ひまわり団地前の手前から表示
