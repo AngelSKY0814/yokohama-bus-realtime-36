@@ -24,6 +24,46 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
 .bus-list{max-height:330px;overflow-y:auto;margin-top:10px}.bus-item{border-top:1px solid #ddd;padding:8px 0;font-size:14px}.bus-item strong{color:#0066cc}
 .status{font-size:13px;color:#666;margin-top:5px}
 
+
+/* 82系統の分岐線・ジャンプボタン */
+.route-branch{
+  position:absolute;
+  top:3580px;
+  left:0;
+  width:330px;
+  height:260px;
+  z-index:1;
+  pointer-events:none;
+}
+.route-branch path{
+  fill:none;
+  stroke:#f2a000;
+  stroke-width:7;
+  stroke-linecap:butt;
+  stroke-linejoin:miter;
+}
+.route-jump{
+  position:absolute;
+  top:3480px;
+  left:22px;
+  z-index:10;
+  border:3px solid #f2a000;
+  border-radius:10px;
+  background:#fff;
+  color:#b66b00;
+  padding:10px 18px;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,.16);
+}
+.route-jump:hover{background:#fff6e5}
+.station,.station-name{z-index:2}
+@media(max-width:700px){
+  .route-branch{width:50vw;height:260px}
+  .route-jump{left:3vw;font-size:16px;padding:8px 12px}
+}
+
 /* スマホ向けレイアウト */
 @media (max-width: 700px){
   body{min-height:2800px;overflow-x:hidden;overflow-y:auto;}
@@ -97,7 +137,13 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
 </style>
 </head>
 <body>
-<div class="line"></div>
+<div class="line" aria-hidden="true"></div>
+<svg class="route-branch" viewBox="0 0 330 260" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M 0 130 L 330 130" />
+</svg>
+<button class="route-jump" type="button"
+  onclick="jumpToStation('熊の堂')"
+  aria-label="82系統の分岐付近へ移動">82系統</button>
 <div class="info-panel">
   <div class="info-title">36系統</div>
   <div class="info-label"></div>
@@ -212,7 +258,7 @@ const displayTop={
 
 for(const name of stationNames){
   const s=document.createElement("div");
-  s.className="station"; s.style.top=displayTop[name]+"px";
+  s.className="station"; s.id="station-"+name; s.style.top=displayTop[name]+"px";
   document.body.appendChild(s);
 
   const n=document.createElement("div");
@@ -236,42 +282,6 @@ let busUpdateRunning=false;
 let routeStopsRetryRunning=false;
 const busClusterElements={};
 const expandedBusGroups=new Set();
-  // 非表示にする境界の停留所
-const hideStop = {
-  name: "山王森公園前",
-  latitude: 35.497617,
-  longitude: 139.607398
-};
-
-// GPS間の距離をメートルで計算
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const rad = Math.PI / 180;
-
-  const dLat = (lat2 - lat1) * rad;
-  const dLon = (lon2 - lon1) * rad;
-
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * rad) *
-    Math.cos(lat2 * rad) *
-    Math.sin(dLon / 2) ** 2;
-
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-// バスが境界の停留所に到達したか判定
-function isAtHideStop(bus) {
-  const distance = getDistance(
-    Number(bus.latitude),
-    Number(bus.longitude),
-    hideStop.latitude,
-    hideStop.longitude
-  );
-
-  return distance <= 40;
-}
-
 /* ---------------------------------------
 route_stops.json
 ---------------------------------------- */
@@ -421,62 +431,6 @@ function buildScreenRoute(route){
   }));
 }
 /* ---------------------------------------
-   西菅田団地～ケアプラザ入口の区間を探す
----------------------------------------- */
-function findCommonSection(stops){
-
-  const candidates=[];
-
-  const landmarks=[
-    "ひまわり団地前",
-    "小川橋",
-    "道路碑前",
-    "熊の堂",
-    "菅田町入口"
-  ];
-
-  for(let i=0;i<stops.length;i++){
-
-    if(stops[i].name!=="西菅田団地") continue;
-
-    for(let j=0;j<stops.length;j++){
-
-      if(stops[j].name!=="ケアプラザ入口") continue;
-      if(i===j) continue;
-
-      const start=Math.min(i,j);
-      const end=Math.max(i,j);
-
-      const length=
-        stops[end].cumulativeDistance-
-        stops[start].cumulativeDistance;
-
-      if(length<500 || length>8000) continue;
-
-      const sectionStops=stops.slice(start,end+1);
-
-      const landmarkCount=sectionStops.filter(stop=>
-        landmarks.includes(stop.name)
-      ).length;
-
-      if(landmarkCount<2) continue;
-
-      candidates.push({
-        start,
-        end,
-        length
-      });
-    }
-  }
-
-  if(candidates.length===0) return null;
-
-  candidates.sort((a,b)=>a.length-b.length);
-
-  return candidates[0];
-}
-  
-/* ---------------------------------------
    バスGPSを路線の線分上へ投影
 ---------------------------------------- */
 function projectBus(bus,route){
@@ -533,6 +487,50 @@ function routeDistanceToTop(projected){
 }
 
 
+
+/* ---------------------------------------
+   バスの表示区間を判定する共通処理
+---------------------------------------- */
+const DISPLAY_BEFORE_STOP_METERS = 60;
+const EXPRESS_STOP_NAMES = [];
+
+function findStopDistance(projected, names){
+  if(!projected || !Array.isArray(projected.stops)) return null;
+  const targets=Array.isArray(names)?names:[names];
+  const stop=projected.stops.find(item=>targets.includes(String(item.name||"")));
+  return stop ? Number(stop.cumulativeDistance) : null;
+}
+
+function isInsideStopSection(projected, startNames, endNames){
+  const start=findStopDistance(projected,startNames);
+  const end=findStopDistance(projected,endNames);
+  if(start===null || end===null) return false;
+  const low=Math.min(start,end)-35;
+  const high=Math.max(start,end)+35;
+  return projected.routeDistance>=low && projected.routeDistance<=high;
+}
+
+function isBeforeDisplayPoint(projected, stopNames){
+  const target=findStopDistance(projected,stopNames);
+  if(target===null) return false;
+  return projected.routeDistance < target-DISPLAY_BEFORE_STOP_METERS;
+}
+
+function getAccurateBusTop(bus){
+  const route=routeStopsData[String(bus.courseId)];
+  if(!route) return null;
+  const projected=projectBus(bus,route);
+  if(!projected) return null;
+  return routeDistanceToTop(projected);
+}
+
+function jumpToStation(name){
+  const target=document.getElementById("station-"+name);
+  if(!target) return;
+  const top=Number(displayTop[name]||0);
+  window.scrollTo({top:Math.max(0,top-window.innerHeight/2),behavior:"smooth"});
+}
+
 function shouldDisplayBus(bus, projected){
   if(!projected) return false;
 
@@ -572,7 +570,7 @@ function shouldDisplayBus(bus, projected){
     if(isInsideStopSection(
       projected,
       "日枝橋",
-      ["神大寺入口","神大寺入口"]
+      ["神大寺入口","日枝橋"]
     )){
       return false;
     }
