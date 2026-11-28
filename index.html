@@ -275,29 +275,48 @@ function isAtHideStop(bus) {
 /* ---------------------------------------
 route_stops.json
 ---------------------------------------- */
-async function loadRouteStops(){
-const response=await fetch(
-  "route_stops.json?"+Date.now(),
-  {cache:"no-store"}
-);
-if(!response.ok){
-throw new Error("route_stops.json を読み込めません");
-}
+async function loadRouteStops() {
+    try {
+        const url = new URL("route_stops.json", location.href);
+        url.searchParams.set("_", Date.now());
 
-const data=await response.json();
+        console.log("停留所データ取得先:", url.href);
 
-if(!Array.isArray(data.routes)){
-throw new Error("route_stops.json の形式が正しくありません");
-}
+        const response = await fetch(url.href, {
+            cache: "no-store"
+        });
 
-routeStopsData={};
+        if (!response.ok) {
+            throw new Error(
+                "route_stops.json の読み込み失敗: HTTP " + response.status
+            );
+        }
 
-for(const route of data.routes){
-routeStopsData[String(route.courseId)]=route;
-}
+        const data = await response.json();
 
-document.getElementById("routeStatus").textContent=
-"路線の停留所情報を読み込みました。";
+        if (!Array.isArray(data.routes)) {
+            throw new Error("route_stops.json の形式が正しくありません");
+        }
+
+        routeStopsData = {};
+
+        for (const route of data.routes) {
+            routeStopsData[String(route.courseId)] = route;
+        }
+
+        document.getElementById("routeStatus").textContent =
+            "路線の停留所情報を読み込みました。";
+
+        console.log("停留所データ取得成功:", data.routes.length);
+
+    } catch (error) {
+        console.error("停留所データ取得エラー:", error);
+
+        document.getElementById("routeStatus").textContent =
+            "停留所データの取得に失敗しました: " + error.message;
+
+        throw error;
+    }
 }
 
 /* ---------------------------------------
