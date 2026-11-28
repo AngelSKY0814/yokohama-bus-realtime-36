@@ -2819,7 +2819,7 @@
       "route": "82系統",
       "destination": "片倉町駅前経由 八反橋行",
       "direction": "up",
-      "stopCount": 21,
+      "stopCount": 22,
       "stops": [
         {
           "name": "横浜駅西口",
@@ -2938,7 +2938,7 @@
       "route": "82系統",
       "destination": "片倉町駅前経由 八反橋行",
       "direction": "up",
-      "stopCount": 16,
+      "stopCount": 17,
       "stops": [
         {
           "name": "東神奈川駅西口",
