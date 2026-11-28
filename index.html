@@ -532,44 +532,6 @@ function routeDistanceToTop(projected){
   return Math.max(low,Math.min(high,raw));
 }
 
-/* ---------------------------------------
-   表示区間の制御
-   ・区間内を非表示にする
-   ・指定停留所の手前から表示を開始する
----------------------------------------- */
-
-// 指定停留所の何m手前から表示を開始するか
-const DISPLAY_BEFORE_STOP_METERS = 60;
-
-// 急行の停車停留所名をここに追加する。
-// 例：["六角橋", "神奈川大学入口"]
-// 空欄のままでは、停留所データに急行情報がある場合のみ判定する。
-const EXPRESS_STOP_NAMES = [];
-
-function findStopDistance(projected, names){
-  if(!projected || !Array.isArray(projected.stops)) return null;
-  const targets=Array.isArray(names)?names:[names];
-  const stop=projected.stops.find(item=>targets.includes(String(item.name||"")));
-  return stop ? Number(stop.cumulativeDistance) : null;
-}
-
-// 指定した2停留所の間にバスがいるか判定（上下方向どちらでも対応）
-function isInsideStopSection(projected, startNames, endNames){
-  const start=findStopDistance(projected,startNames);
-  const end=findStopDistance(projected,endNames);
-  if(start===null || end===null) return false;
-
-  const low=Math.min(start,end)-35;
-  const high=Math.max(start,end)+35;
-  return projected.routeDistance>=low && projected.routeDistance<=high;
-}
-
-// 指定停留所の手前までは非表示にする
-function isBeforeDisplayPoint(projected, stopNames){
-  const target=findStopDistance(projected,stopNames);
-  if(target===null) return false;
-  return projected.routeDistance < target-DISPLAY_BEFORE_STOP_METERS;
-}
 
 function shouldDisplayBus(bus, projected){
   if(!projected) return false;
@@ -578,40 +540,80 @@ function shouldDisplayBus(bus, projected){
   const destination=String(bus.destination||"");
   const routeAndDestination=route+" "+destination;
 
+  // 八反橋を経由する便かどうか
+  const viaHattanbashi =
+    routeAndDestination.includes("八反橋");
+
   // 82系統・八反橋方面：菅田町入口～八反橋を非表示
-  if(route.includes("82系統") && destination.includes("八反橋")){
-    if(isInsideStopSection(projected,"菅田町入口","八反橋")) return false;
+  // ただし、八反橋経由便はこの条件を適用しない
+  if(
+    route.includes("82系統") &&
+    destination.includes("八反橋") &&
+    !viaHattanbashi
+  ){
+    if(isInsideStopSection(projected,"菅田町入口","八反橋")) {
+      return false;
+    }
   }
 
   // 295系統：新横浜駅前～ケアプラザ入口を両方向とも非表示
   if(route.includes("295系統")){
-    if(isInsideStopSection(projected,"新横浜駅前","ケアプラザ入口")) return false;
+    if(isInsideStopSection(projected,"新横浜駅前","ケアプラザ入口")) {
+      return false;
+    }
   }
 
   // 82系統・88系統：日枝橋～神大寺入口を非表示
-  // 停留所データの表記差に備え「神大寺」も同じ境界として扱う
-  if(route.includes("82系統") || route.includes("88系統")){
-    if(isInsideStopSection(projected,"日枝橋",["神大寺入口","神大寺"])) return false;
+  // 八反橋経由便は例外として表示する
+  if(
+    (route.includes("82系統") || route.includes("88系統")) &&
+    !viaHattanbashi
+  ){
+    if(isInsideStopSection(
+      projected,
+      "日枝橋",
+      ["神大寺入口","神大寺"]
+    )){
+      return false;
+    }
   }
 
   // 88系統：東神奈川駅西口～市民病院を非表示
   if(route.includes("88系統")){
-    if(isInsideStopSection(projected,"東神奈川駅西口","市民病院")) return false;
+    if(isInsideStopSection(
+      projected,
+      "東神奈川駅西口",
+      ["市民病院","市民病院前"]
+    )){
+      return false;
+    }
   }
 
   // 六角橋方面の全路線：鶴屋町2丁目の手前から表示
   if(routeAndDestination.includes("六角橋")){
-    if(isBeforeDisplayPoint(projected,"鶴屋町２丁目")) return false;
+    if(isBeforeDisplayPoint(
+      projected,
+      ["鶴屋町２丁目","鶴屋町2丁目"]
+    )){
+      return false;
+    }
   }
 
   // 菅田町経由・緑車庫方面：菅田町の手前から表示
   if(destination.includes("菅田町") && destination.includes("緑車庫")){
-    if(isBeforeDisplayPoint(projected,"菅田町")) return false;
+    if(isBeforeDisplayPoint(projected,"菅田町")){
+      return false;
+    }
   }
 
   // 菅田町経由・横浜方面：ひまわり団地前の手前から表示
   if(destination.includes("菅田町") && destination.includes("横浜")){
-    if(isBeforeDisplayPoint(projected,["ひまわり団地前","ひまわり団地"])) return false;
+    if(isBeforeDisplayPoint(
+      projected,
+      ["ひまわり団地前","ひまわり団地"]
+    )){
+      return false;
+    }
   }
 
   // 急行：急行停車停留所の手前から表示
@@ -621,29 +623,22 @@ function shouldDisplayBus(bus, projected){
       stop.express===true ||
       stop.stopType==="express"
     );
+
     const expressNames=EXPRESS_STOP_NAMES.length
       ? EXPRESS_STOP_NAMES
       : (markedStop?[markedStop.name]:[]);
-    if(expressNames.length && isBeforeDisplayPoint(projected,expressNames)) return false;
+
+    if(
+      expressNames.length &&
+      isBeforeDisplayPoint(projected,expressNames)
+    ){
+      return false;
+    }
   }
 
   return true;
 }
 
-function getAccurateBusTop(bus){
-  const route=routeStopsData[String(bus.courseId)];
-  if(!route) return null;
-
-  const projected=projectBus(bus,route);
-  if(!projected) return null;
-
-  /*
-    GPSが路線から大きく外れている場合でも
-    完全に消さず、最近区間に表示する。
-    これで実際のバスを突然消すことを防ぐ。
-  */
-  return routeDistanceToTop(projected);
-}
 
 /* ---------------------------------------
    バス作成・更新
