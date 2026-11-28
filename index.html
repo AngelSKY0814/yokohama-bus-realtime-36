@@ -38,13 +38,17 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
   pointer-events: none;
 }
 
-/* オレンジ色の分岐線 */
-.route-branch path {
-  fill: none;
-  stroke: #ffb900;
-  stroke-width: 5;
-  stroke-linecap: butt;
-  stroke-linejoin: round;
+
+<!-- 82系統のオレンジ色の分岐線 -->
+<svg class="route-branch"
+     viewBox="0 0 330 100"
+     preserveAspectRatio="none"
+     aria-hidden="true">
+
+  <path d="M 0 0 H 270 C 305 0 330 25 330 62" />
+
+</svg>
+
 }
 
 /* 82系統の移動ボタン */
