@@ -26,42 +26,67 @@ body{background:#f5f5f5;font-family:"Yu Gothic","Meiryo",sans-serif;position:rel
 
 
 /* 82系統の分岐線・ジャンプボタン */
-.route-branch{
-  position:absolute;
-  top:3580px;
-  left:0;
-  width:330px;
-  height:260px;
-  z-index:1;
-  pointer-events:none;
+
+/* 82系統・八反橋方面の分岐線とジャンプボタン */
+.route-branch {
+  position: absolute;
+  top: 3838px;
+  left: 0;
+  width: 330px;
+  height: 100px;
+  z-index: 1;
+  pointer-events: none;
 }
-.route-branch path{
-  fill:none;
-  stroke:#f2a000;
-  stroke-width:7;
-  stroke-linecap:butt;
-  stroke-linejoin:miter;
+
+/* オレンジ色の分岐線 */
+.route-branch path {
+  fill: none;
+  stroke: #ffb900;
+  stroke-width: 5;
+  stroke-linecap: butt;
+  stroke-linejoin: round;
 }
-.route-jump{
-  position:absolute;
-  top:3480px;
-  left:22px;
-  z-index:10;
-  border:3px solid #f2a000;
-  border-radius:10px;
-  background:#fff;
-  color:#b66b00;
-  padding:10px 18px;
-  font-size:20px;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 2px 6px rgba(0,0,0,.16);
+
+/* 82系統の移動ボタン */
+.route-jump {
+  position: absolute;
+  top: 3774px;
+  left: 4px;
+  z-index: 10;
+  min-height: 44px;
+  border: none;
+  border-radius: 0;
+  background: #fff;
+  color: #f0a500;
+  padding: 10px 14px;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
 }
-.route-jump:hover{background:#fff6e5}
-.station,.station-name{z-index:2}
-@media(max-width:700px){
-  .route-branch{width:50vw;height:260px}
-  .route-jump{left:3vw;font-size:16px;padding:8px 12px}
+
+.route-jump:hover {
+  background: #fff;
+}
+
+/* 停留所より手前に線を表示 */
+.station,
+.station-name {
+  z-index: 2;
+}
+
+@media (max-width: 700px) {
+  .route-branch {
+    width: 50vw;
+    height: 100px;
+  }
+
+  .route-jump {
+    left: 2vw;
+    font-size: 16px;
+    padding: 8px 10px;
+  }
 }
 
 /* スマホ向けレイアウト */
